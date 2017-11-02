@@ -1,4 +1,4 @@
-public class Block {
+public abstract class Block {
   private boolean ic;// abbreviation of isclicked
   private String s;
   public Block(){
