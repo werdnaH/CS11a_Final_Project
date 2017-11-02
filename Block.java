@@ -10,5 +10,5 @@ public class Block {
   }
   public void setFlag();
   public void setqm(); //set question mark
-  
+  public String display();// return the content that will show on the command line  
 }
