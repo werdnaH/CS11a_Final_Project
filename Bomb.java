@@ -1,5 +1,4 @@
 public class Bomb extends Block {
-  public String type;
   public Bomb(){
     super();
     type = "Bomb";

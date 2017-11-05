@@ -1,15 +1,25 @@
 public abstract class Block {
   public boolean ic;// abbreviation of isclicked
   public String s;
+  public String type;
   public Block(){
     ic = false;
-    s = null;
+    s = "null"; // for testing
+    type = null;
   }
   public void setFlag() {
-    s = "F";
+    if(ic == true){
+      ;
+    } else {
+      s = "F";
+    }
   }
   public void setqm() {
-    s = "?";
+    if(ic == true){
+      ;
+    } else {
+      s = "?";
+    }
   } //set question mark
   public abstract void click();
 }

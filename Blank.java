@@ -1,5 +1,4 @@
 public class Blank extends Block {
-  public String type;
   public Blank() {
     super();
     type = "Blank";

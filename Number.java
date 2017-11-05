@@ -1,14 +1,11 @@
 public class Number extends Block{
-  public String type;
-  public int num;
-  public Blank() {
+  public Number() {
     super();
     type = "Number";
   }
   @Override
   public void click() {
     ic = true;
-    s = "N";
   }
 
 }
