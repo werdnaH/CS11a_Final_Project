@@ -4,7 +4,7 @@ public abstract class Block {
   public String type;
   public Block(){
     ic = false;
-    s = "null"; // for testing
+    s = "N"; // for testing
     type = null;
   }
   public void setFlag() {

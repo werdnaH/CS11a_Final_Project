@@ -1,6 +1,7 @@
 public class Bomb extends Block {
   public Bomb(){
     super();
+    s = "B";
     type = "Bomb";
   }
   @Override

@@ -16,21 +16,20 @@ public class Field {
       nb = sc.nextInt();
     }
     f =  new Block[m][n];
-    generateb(f,nb);
-    generaten(f);
-    generatebl(f);
   }
   // generate the bombs, x stands for numboer of bombs
-  public void generateb(Block[][] obj, int x) {
-    while (true){
-      for(Block[] i: obj){
-        for(Block j : i) {
+  public void generateb() {
+    int x = nb;
+    while(true) {
+      for(int i = 0; i < f.length; i++) {
+        for(int j = 0; j < f[i].length; j++) {
           if(x != 0){
-            double a;
-            double p = x/(m*n); // p stands fro possiblity
-            a = Math.random();
-            if(a < x) {
-              j = new Bomb();
+            double a = Math.random();
+            double p = (double)x/(m*n); // p stands fro possiblity
+            //System.out.println("a=" + a); debugging
+            //System.out.println("p=" + p); debugging
+            if(a < p && f[i][j] == null) {
+              f[i][j] = new Bomb();
               x--;
             }
           }
@@ -54,9 +53,9 @@ public class Field {
   }
   */
   // generate the numbers
-  public void generaten(Block[][] obj) {
-    for(int i =0; i < obj.length; i++) {
-      for(int j = 0; j < obj[0].length; j++) {
+  public void generaten() {
+    for(int i =0; i < f.length; i++) {
+      for(int j = 0; j < f[0].length; j++) {
         int x = i-1;
         int y = j-1;
         int a = 0;
@@ -64,35 +63,38 @@ public class Field {
           try {
               smallloop: while(y <= j+1) {
               try {
-                if(obj[x][y].type.equals("Bomb") && (x != i || y!=j) && obj[i][j] == null) {
-                  obj[i][j] = new Number();
+                if(f[x][y].type.equals("Bomb") && (x != i || y != j) && f[i][j] == null) {
+                  f[i][j] = new Number();
                   a++;
-                } else if(obj[x][y].type.equals("Bomb") && (x != i || y!=j)) {
+                  f[i][j].s = String.valueOf(a);
+                } else if(f[x][y].type.equals("Bomb") && (x != i || y != j) && f[i][j].s != "B") {
                   a++;
+                  f[i][j].s = String.valueOf(a);
                 }
                 y++;
-              } catch(ArrayIndexOutOfBoundsException e) {
+              //} catch (ArrayIndexOutOfBoundsException e) {
+              } catch (Exception e) {
                 y++;
                 continue smallloop;
               }
             }
             x++;
-            y = 0;
-          } catch (ArrayIndexOutOfBoundsException e) {
+            y = j - 1;
+          //} catch (ArrayIndexOutOfBoundsException e) {
+          } catch (Exception e) {
             x++;
             continue bigloop;
           }
         }
-        obj[i][j].s = String.valueOf(a);
       }
     }
   }
 
-  public void generatebl(Block[][] obj) {
-    for(Block[] i: obj) {
-      for(Block j : i) {
-        if(j == null) {
-          j = new Blank();
+  public void generatebl() {
+    for(int i =0; i < f.length; i++) {
+      for(int j = 0; j < f[i].length; j++) {
+        if(f[i][j] == null) {
+          f[i][j] = new Blank();
         }
       }
     }
@@ -119,6 +121,19 @@ public class Field {
     System.out.println(test.m);
     System.out.println(test.n);
     System.out.println(test.f);
-    test.print();
+    test.generateb();
+    test.generaten();
+    test.generatebl();
+    System.out.println("...");
+    for(int i = 0; i < test.f.length; i++) {
+      for(int j = 0; j < test.f[0].length; j++) {
+        if(test.f[i][j] != null)
+          System.out.print(test.f[i][j].s + " ");
+        else
+          System.out.print(0);
+      }
+      System.out.println();
+    }
+    //test.print();
   }
 }
