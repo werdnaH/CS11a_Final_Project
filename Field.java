@@ -21,20 +21,19 @@ public class Field {
   public void generateb() {
     int x = nb;
     while(true) {
-      for(int i = 0; i < f.length; i++) {
-        for(int j = 0; j < f[i].length; j++) {
-          if(x != 0){
-            double a = Math.random();
-            double p = (double)x/(m*n); // p stands fro possiblity
-            //System.out.println("a=" + a); debugging
-            //System.out.println("p=" + p); debugging
-            if(a < p && f[i][j] == null) {
-              f[i][j] = new Bomb();
-              x--;
-            }
-          }
+      int m1 = (int)(Math.random()*m);
+      int n1 = (int)(Math.random()*n);
+      if(x != 0){
+        double a = Math.random();
+        double p = (double)x/(m*n); // p stands fro possiblity
+        //System.out.println("a=" + a); debugging
+        //System.out.println("p=" + p); debugging
+        if(a < p && f[m1][n1] == null) {
+          f[m1][n1] = new Bomb();
+          x--;
         }
       }
+
       if(x > 0)
       continue;
       else
@@ -89,7 +88,7 @@ public class Field {
       }
     }
   }
-
+  //generate blanks
   public void generatebl() {
     for(int i =0; i < f.length; i++) {
       for(int j = 0; j < f[i].length; j++) {
@@ -115,16 +114,64 @@ public class Field {
   public void operate(){
     ;
   }
+  public void click(int i, int j) {
+    if(f[i][j].type == "Bomb") {
+      System.out.println("Game Over");
+      print();
+      return;
+    }
+    if(f[i][j].type == "Number") {
+      f[i][j].ic = true;
+    }
+    if(f[i][j].type == "Blank") {
+      f[i][j].click();
+      BlankHelper(i,j);
+    }
+    print();
+  }
+  public void BlankHelper(int i, int j) {
+    int x = i-1;
+    int y = j-1;
+    int a = 0;
+    bigloop: while (x <= i+1) {
+      try {
+          smallloop: while(y <= j+1) {
+          try {
+            f[x][y].click();
+            if(f[x][y].type == "Blank") {
+              BlankHelper(x,y);
+            }
+            y++;
+          //} catch (ArrayIndexOutOfBoundsException e) {
+          } catch (Exception e) {
+            y++;
+            continue smallloop;
+          }
+        }
+        x++;
+        y = j - 1;
+      //} catch (ArrayIndexOutOfBoundsException e) {
+      } catch (Exception e) {
+        x++;
+        continue bigloop;
+      }
+    }
+  }
+  //deterine if the game is end
+  public boolean result() {
+    return false;
+  }
   public static void main(String[] args){
     Field test = new Field();
 
     System.out.println(test.m);
     System.out.println(test.n);
     System.out.println(test.f);
+    //The sequence should be 1 generateb 2 generaten 3 generatebl
     test.generateb();
     test.generaten();
     test.generatebl();
-    System.out.println("...");
+    System.out.println("Loading...");
     for(int i = 0; i < test.f.length; i++) {
       for(int j = 0; j < test.f[0].length; j++) {
         if(test.f[i][j] != null)
@@ -134,6 +181,7 @@ public class Field {
       }
       System.out.println();
     }
-    //test.print();
+    test.click(2,2);
+    test.print();
   }
 }
