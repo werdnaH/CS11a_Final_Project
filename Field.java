@@ -69,6 +69,7 @@ public class Field {
                 } else if(f[x][y].type.equals("Bomb") && (x != i || y != j) && f[i][j].s != "B") {
                   a++;
                   f[i][j].s = String.valueOf(a);
+                  f[i][j].n = a;
                 }
                 y++;
               //} catch (ArrayIndexOutOfBoundsException e) {
@@ -102,7 +103,7 @@ public class Field {
   public void print() {
     for(int i = 0; i < f.length; i++) {
       for(int j = 0; j < f[0].length; j++) {
-        if(f[i][j].ic) {
+        if(f[i][j].ic || f[i][j].isf || f[i][j].isq) {
           System.out.print(f[i][j].s + " ");
         } else {
           System.out.print(". ");
@@ -112,11 +113,51 @@ public class Field {
     }
   }
   public void operate(){
-    ;
+    Scanner sc = new Scanner(System.in);
+    int row, col;
+    String s;
+    System.out.println("Click: x,y");
+    System.out.println("Set Flag: f x,y ");
+    System.out.println("Set Question Mark: q x,y");
+    do {
+      try {
+        s = sc.nextLine();
+
+        switch(s.substring(0,1)) {
+          case"f":
+          row = Integer.parseInt(s.replaceAll("\\s+","").substring(1,s.replaceAll("\\s+","").indexOf(",")));
+          col = Integer.parseInt(s.substring(s.indexOf(",")+1));
+          f[row][col].setFlag();
+          print();
+          break;
+          case"q":
+          row = Integer.parseInt(s.replaceAll("\\s+","").substring(1,s.replaceAll("\\s+","").indexOf(",")));
+          col = Integer.parseInt(s.substring(s.indexOf(",")+1));
+          f[row][col].setqm();
+          print();
+          break;
+          default:
+          row = Integer.parseInt(s.replaceAll("\\s+","").substring(0,s.replaceAll("\\s+","").indexOf(",")));
+          col = Integer.parseInt(s.substring(s.indexOf(",")+1));
+          click(row,col);
+          break;
+        }
+        if(!iswin())
+        System.out.println("Continue");
+      } catch(NumberFormatException e) {
+        continue;
+      }
+    } while(!iswin());
+
+
+
+
+
   }
   public void click(int i, int j) {
     if(f[i][j].type == "Bomb") {
       System.out.println("Game Over");
+      f[i][j].ic = true;
       print();
       return;
     }
@@ -137,9 +178,12 @@ public class Field {
       try {
           smallloop: while(y <= j+1) {
           try {
-            f[x][y].click();
-            if(f[x][y].type == "Blank") {
-              BlankHelper(x,y);
+            if(f[x][y].type == "Blank" && f[x][y].ic == false && (x != i || y != j) && f[x][y].isf == false) {
+              f[x][y].click();
+              this.BlankHelper(x,y);
+            }
+            if(f[x][y].type == "Number" && f[x][y].isf == false) {
+              f[x][y].click();
             }
             y++;
           //} catch (ArrayIndexOutOfBoundsException e) {
@@ -158,7 +202,7 @@ public class Field {
     }
   }
   //deterine if the game is end
-  public boolean result() {
+  public boolean iswin() {
     return false;
   }
   public static void main(String[] args){
@@ -181,7 +225,9 @@ public class Field {
       }
       System.out.println();
     }
-    test.click(2,2);
-    test.print();
+    System.out.println();
+    test.operate();
+    //test.click(2,2);
+    //test.print();
   }
 }

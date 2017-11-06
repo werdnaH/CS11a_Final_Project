@@ -6,6 +6,6 @@ public class Blank extends Block {
   @Override
   public void click() {
     ic = true;
-    s = "N";
+    s = "#";
   }
 }
