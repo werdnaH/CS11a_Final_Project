@@ -69,7 +69,7 @@ public class Field {
                 } else if(f[x][y].type.equals("Bomb") && (x != i || y != j) && f[i][j].s != "B") {
                   a++;
                   f[i][j].s = String.valueOf(a);
-                  f[i][j].n = a;
+                  ((Number)f[i][j]).n = a;
                 }
                 y++;
               //} catch (ArrayIndexOutOfBoundsException e) {
@@ -144,7 +144,8 @@ public class Field {
         }
         if(!iswin())
         System.out.println("Continue");
-      } catch(NumberFormatException e) {
+      } catch(Exception e) {
+        System.out.println("Invalid Input, Enter Again");
         continue;
       }
     } while(!iswin());
