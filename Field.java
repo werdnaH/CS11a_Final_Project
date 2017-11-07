@@ -149,11 +149,7 @@ public class Field {
         continue;
       }
     } while(!iswin());
-
-
-
-
-
+    System.out.println("You Win");
   }
   public void click(int i, int j) {
     if(f[i][j].type == "Bomb") {
@@ -164,6 +160,15 @@ public class Field {
     }
     if(f[i][j].type == "Number") {
       f[i][j].ic = true;
+      if(iswin()) {
+        for(int i1 =0; i1 < f.length; i1++) {
+          for(int j1 = 0; j1 < f[0].length; j1++) {
+            if(f[i1][j1].type.equals("Bomb")) {
+              f[i1][j1].setFlag();
+            }
+          }
+        }
+      }
     }
     if(f[i][j].type == "Blank") {
       f[i][j].click();
@@ -204,7 +209,18 @@ public class Field {
   }
   //deterine if the game is end
   public boolean iswin() {
-    return false;
+    for(Block[] i : f) {
+      for(Block j : i) {
+        if(j.type.equals("Number")) {
+          if(j.ic) {
+            ;
+          } else {
+            return false;
+          }
+        }
+      }
+    }
+    return true;
   }
   public static void main(String[] args){
     Field test = new Field();
