@@ -40,17 +40,6 @@ public class Field {
       break;
     }
   }
-  /* repeated codes
-  for(Block[] i: obj) {
-    for(Block j : i) {
-      for(int i =0; i < obj[].length; i++) {
-        for(int j = 0; j < obj.length; j++) {
-          ;
-        }
-      }
-    }
-  }
-  */
   // generate the numbers
   public void generaten() {
     for(int i =0; i < f.length; i++) {
@@ -142,6 +131,14 @@ public class Field {
           click(row,col);
           break;
         }
+        for(Block[] i: f) {
+          for(Block j : i) {
+            if(j.type == "Bomb" && j.ic) {
+              System.out.println("You Lose");
+              return;
+            }
+          }
+        }
         if(!iswin())
         System.out.println("Continue");
       } catch(Exception e) {
@@ -171,7 +168,7 @@ public class Field {
       }
     }
     if(f[i][j].type == "Blank") {
-      f[i][j].click();
+      ((Blank)f[i][j]).click();
       BlankHelper(i,j);
     }
     print();
@@ -243,8 +240,8 @@ public class Field {
       System.out.println();
     }
     System.out.println();
+    test.print();
     test.operate();
     //test.click(2,2);
-    //test.print();
   }
 }

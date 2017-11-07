@@ -15,6 +15,17 @@ public abstract class Block {
   public void setFlag() {
     if(ic == true){
       ;
+    } else if(isf == true) {
+      isf = false;
+      switch (this.type) {
+        case "Bomb":
+        this.s = "B";
+        break;
+        case "Number":
+        this.s = String.valueOf(((Number)this).n);
+        case "Blank":
+        this.s = "#";
+      }
     } else {
       s = "F";
       isf = true;
@@ -23,6 +34,17 @@ public abstract class Block {
   public void setqm() {
     if(ic == true){
       ;
+    } else if(isq == true) {
+      isq = false;
+      switch (this.type) {
+        case "Bomb":
+        this.s = "B";
+        break;
+        case "Number":
+        this.s = String.valueOf(((Number)this).n);
+        case "Blank":
+        this.s = "#";
+      }
     } else {
       isq = true;
       s = "?";
