@@ -8,17 +8,49 @@
 import java.sql.*;
 
 public class LeaderBoard{
+	
   public static void main(String[] args){
-    //createPlayerTable();
-	  createDataTable();
+	LeaderBoard lb = new LeaderBoard();
+	lb.createDataTable();
   }
-  //This method creates a table in the database for storing players' user names
-  public static void createPlayerTable(){
-	  Connection c = null;
-	  Statement stmt = null;
+  
+  public Connection c = null;
+  public Statement stmt = null;
+  public String sql = new String();//sql is command in SQL
+  
+  public void connect() {
 	  try {
-		  Class.forName("org.sqlite.JDBC");
-		  c = DriverManager.getConnection("jdbc:sqlite:leaderboard.db");
+	  Class.forName("org.sqlite.JDBC");
+	  c = DriverManager.getConnection("jdbc:sqlite:leaderboard.db");
+	  System.out.println("Connected to database successfully...");
+	  } catch (Exception e) {
+		  System.out.println("Connection fails because of an exception");
+		  System.out.println(e.getClass().getName() +
+				  ": " + e.getMessage());
+	  }
+  }
+  
+  //this method gives score based on time and level of difficulty
+  public int scoreGenerator(double time, int size, int nb){
+	  int score;
+	  score = (int) time+size+nb;
+	  return score;
+  }
+  
+  //This method update information inside playData 
+  public void updateTable() {
+	  
+  }
+  
+  //This method checks if the user name is taken
+  public boolean ifNameExists(String name) {
+	  return true;
+  }
+  
+  //This method creates a table in the database for storing players' user names
+  public void createPlayerTable(){
+	  try {
+		  connect();
 		  stmt = c.createStatement();
 		  String sql = "CREATE TABLE players("
 		  		+ "id  INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,"
@@ -36,12 +68,9 @@ public class LeaderBoard{
   
   //This method creates a table in the database for storing all relevant information
   //for every game
-  public static void createDataTable(){
-	  Connection c = null;
-	  Statement stmt = null;
+  public void createDataTable(){
 	  try {
-		  Class.forName("org.sqlite.JDBC");
-		  c = DriverManager.getConnection("jdbc:sqlite:leaderboard.db");
+		  connect();
 		  stmt = c.createStatement();
 		  String sql = "CREATE TABLE GameData("
 		  		+ "id  INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,"
@@ -58,15 +87,5 @@ public class LeaderBoard{
 		  System.exit(0);
 	  }
 	  System.out.println("Table created successfully!");
-  }
-  //This method update information inside playData 
-  public static void updateTable() {
-	  
-  }
-  //this method gives score based on time and level of difficulty
-  public int scoreGenerator(double time, int size, int nb){
-	  int score;
-	  score = (int) time+size+nb;
-	  return score;
   }
 }
