@@ -9,6 +9,7 @@ import java.sql.*;
 
 public class LeaderBoard{
 	
+  //The main method is only for testing
   public static void main(String[] args){
 	LeaderBoard lb = new LeaderBoard();
 	lb.createDataTable();
