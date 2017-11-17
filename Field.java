@@ -146,6 +146,11 @@ public void operate(){
         f[row][col].setqm();
         print();
         break;
+        case"l":
+        row = Integer.parseInt(s.replaceAll("\\s+","").substring(1,s.replaceAll("\\s+","").indexOf(",")));
+        col = Integer.parseInt(s.substring(s.indexOf(",")+1));
+        lrClick(row,col);
+        break;
         default:
         row = Integer.parseInt(s.replaceAll("\\s+","").substring(0,s.replaceAll("\\s+","").indexOf(",")));
         col = Integer.parseInt(s.substring(s.indexOf(",")+1));
@@ -193,6 +198,41 @@ public void click(int i, int j) {
     BlankHelper(i,j);
   }
   print();
+}
+public void lrClick(int a, int b){
+  for(int i = a+1; i>a-2; i--){
+    for(int j = b+1; j>b-2; j--){
+      if(j<0||i<0||i>=m||j>=n){
+        continue;
+      }
+      if(i!=a&&j!=b){
+        if(f[i][j].type == "Bomb"&&f[i][j].isf==false){
+          System.out.println("Game Over");
+          f[i][j].ic = true;
+          print();
+          return;
+        }
+        if(f[i][j].type == "Blank") {
+          ((Blank)f[i][j]).click();
+          BlankHelper(i,j);
+        }
+        if(f[i][j].type == "Number") {
+          f[i][j].ic = true;
+          if(iswin()) {
+            for(int i1 = 0; i1 < f.length; i1++){
+              for(int j1 = 0; j1 < f[0].length; j1++){
+                if(f[i1][j1].type.equals("Bomb")) {
+                  f[i1][j1].setFlag();
+                }
+              }
+            }
+          }
+        }
+        print();
+
+      }
+    }
+  }
 }
 public void BlankHelper(int i, int j){
   int x = i-1;
