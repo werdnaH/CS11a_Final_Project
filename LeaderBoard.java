@@ -8,18 +8,19 @@
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 public class LeaderBoard{
   
   //The main method is only for testing
   public static void main(String[] args){
-	LeaderBoard lb = new LeaderBoard();
-	lb.updateGame("Zhaonan", 12.5, 3);
+	//LeaderBoard lb = new LeaderBoard();
   }
   
   public Connection c = null;
   public Statement stmt = null;
   public String sql = new String();//sql is command in SQL
+  public ArrayList<GameRecord> records = new ArrayList<GameRecord>();
   
   //This method helps to connect to the leader board database and avoids
   //duplicating code
@@ -94,6 +95,7 @@ public class LeaderBoard{
 	  String time = now.format(formatter);
 	  return time;
   }
+  
   //This method checks if the user name is taken. If name doesn't
   //exist, it returns -1
   public int nameId(String name) {
@@ -116,6 +118,35 @@ public class LeaderBoard{
 		  System.exit(0);
 	  }
 	  return -1;
+  }
+  
+  
+  public ArrayList<GameRecord> orderByTime (int level) {
+	  records.clear();
+	  try {
+		  connect();
+		  stmt = c.createStatement();
+		  ResultSet rs = stmt.executeQuery("SELECT "
+		  		+ "players.userName, "
+		  		+ "GameData.date, GameData.time,"
+		  		+ "GameData.level FROM players JOIN "
+		  		+ "GameData ON GameData.userName_id = players.id WHERE "
+		  		+ "level=" + level +" ORDER BY GameData.time"
+		  				+ " ASC;");
+		  while (rs.next()) {
+			  String name = rs.getString("userName");
+			  String date = rs.getString("date");
+			  String time = String.valueOf(rs.getDouble("time"));
+			  String lev = String.valueOf(rs.getInt("level"));
+			  GameRecord gr = new GameRecord(name,date,time,lev);
+			  records.add(gr);
+		  }
+	  } catch (Exception e){
+		  System.out.println("There's an error:"+e.getClass().getName()
+				  +": "+e.getMessage());
+		  System.exit(0);
+	  }
+	  return records;
   }
   
   //This method creates a table in the database for storing players' user names
