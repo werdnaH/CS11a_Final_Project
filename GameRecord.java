@@ -14,4 +14,8 @@ public class GameRecord {
 		time = tm;
 		level = lv;
 	}
+	public String toString() {
+		return name + " " + date + " "
+				+ time + " " + level;
+	}
 }

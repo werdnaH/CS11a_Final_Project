@@ -14,7 +14,10 @@ public class LeaderBoard{
   
   //The main method is only for testing
   public static void main(String[] args){
-	//LeaderBoard lb = new LeaderBoard();
+	LeaderBoard lb = new LeaderBoard();
+	for (GameRecord gr:lb.playerDateSort("zhaonan")) {
+		System.out.println(gr);
+	}
   }
   
   public Connection c = null;
@@ -46,7 +49,7 @@ public class LeaderBoard{
 			  c.setAutoCommit(false);
 			  stmt = c.createStatement();
 			  sql = "INSERT INTO players (userName) " 
-			  		+"VALUES(\""+ name +"\");";
+			  		+"VALUES(\""+ name.toUpperCase() +"\");";
 			  stmt.executeUpdate(sql);
 			  stmt.close();
 			  c.commit();
@@ -120,7 +123,8 @@ public class LeaderBoard{
 	  return -1;
   }
   
-  
+  //This method returns an arraylist of object GameRecord, based on
+  //time taken for certain level of difficulty for all players
   public ArrayList<GameRecord> orderByTime (int level) {
 	  records.clear();
 	  try {
@@ -141,6 +145,43 @@ public class LeaderBoard{
 			  GameRecord gr = new GameRecord(name,date,time,lev);
 			  records.add(gr);
 		  }
+		  rs.close();
+		  stmt.close();
+		  c.close();
+	  } catch (Exception e){
+		  System.out.println("There's an error:"+e.getClass().getName()
+				  +": "+e.getMessage());
+		  System.exit(0);
+	  }
+	  return records;
+  }
+  
+  //This methods returns an arraylist of GameRecord object sorted
+  //based on the date the game is played
+  public ArrayList<GameRecord> playerDateSort(String un){
+	  records.clear();
+	  int id = nameId(un);
+	  try {
+		  connect();
+		  stmt = c.createStatement();
+		  ResultSet rs = stmt.executeQuery("SELECT "
+		  		+ "players.userName, "
+		  		+ "GameData.date, GameData.time,"
+		  		+ "GameData.level FROM players JOIN "
+		  		+ "GameData ON GameData.userName_id = players.id WHERE "
+		  		+ "userName_id =" + id +" ORDER BY GameData.date"
+		  				+ " DESC;");
+		  while (rs.next()) {
+			  String name = rs.getString("userName");
+			  String date = rs.getString("date");
+			  String time = String.valueOf(rs.getDouble("time"));
+			  String lev = String.valueOf(rs.getInt("level"));
+			  GameRecord gr = new GameRecord(name,date,time,lev);
+			  records.add(gr);
+		  }
+		  rs.close();
+	      stmt.close();
+	      c.close();
 	  } catch (Exception e){
 		  System.out.println("There's an error:"+e.getClass().getName()
 				  +": "+e.getMessage());
