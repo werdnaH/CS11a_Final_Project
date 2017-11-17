@@ -205,7 +205,7 @@ public void lrClick(int a, int b){
       if(j<0||i<0||i>=m||j>=n){
         continue;
       }
-      if(i!=a&&j!=b){
+      if(i!=a||j!=b){
         if(f[i][j].type == "Bomb"&&f[i][j].isf==false){
           System.out.println("Game Over");
           f[i][j].ic = true;
