@@ -6,13 +6,15 @@
 *@author Zhaonan Li
 */
 import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class LeaderBoard{
-	
+  
   //The main method is only for testing
   public static void main(String[] args){
 	LeaderBoard lb = new LeaderBoard();
-	lb.updateName("zhaonan");
+	lb.updateGame("Zhaonan", 12.5, 3);
   }
   
   public Connection c = null;
@@ -33,13 +35,7 @@ public class LeaderBoard{
 	  }
   }
   
-  //this method gives score based on time and level of difficulty
-  public int scoreGenerator(double time, int size, int nb){
-	  int score;
-	  score = (int) time+size+nb;
-	  return score;
-  }
-  
+  //This method inserts user names to the player table.
   public void updateName(String name) {
 	  if (nameId(name) != -1) {
 		  System.out.println("name exists");
@@ -64,16 +60,40 @@ public class LeaderBoard{
   }
   
   //This method updates information inside playData 
-  //un is user name, tm is time taken in second and sc is score
-  public void updateTable(String un,double tm, int sc) {
-	  
+  //un is user name, tm is time taken in second and level is level
+  public void updateGame(String un, double tm, int level) {
+	   try {
+		   updateName(un);
+		   int id = nameId(un);
+		   connect();
+		   c.setAutoCommit(false);
+		   stmt = c.createStatement();
+		   sql = "INSERT INTO GameData (userName_id,date,time,level) " 
+				  	+"VALUES("+ id +","
+				  	+ "\"" + getTime() +"\""
+				  	+ ","+ tm + "," + level
+				  	+ ");";
+		   stmt.executeUpdate(sql);
+		   stmt.close();
+		   c.commit();
+		   c.close();
+		   System.out.println("game data inserted successfully");
+	   } catch (Exception e) {
+			  System.out.println("There's an error:"+e.getClass().getName()
+					  +": "+e.getMessage());
+			  System.exit(0);
+		  }
+	   
   }
   
-  //This method retrieves data from the database
-  public void retrieve() {
-	  
+  //This method returns current time in desired format
+  public String getTime() {
+	  LocalDateTime now = LocalDateTime.now();
+	  DateTimeFormatter formatter = DateTimeFormatter.ofPattern(
+			  "yyyy-MM-dd HH:mm:ss");
+	  String time = now.format(formatter);
+	  return time;
   }
-  
   //This method checks if the user name is taken. If name doesn't
   //exist, it returns -1
   public int nameId(String name) {
@@ -85,6 +105,7 @@ public class LeaderBoard{
 		  int id = rs.getInt("id");
 		  String userName = rs.getString("userName");
 		  if (userName.toLowerCase().equals(name.toLowerCase())) {
+			  rs.close();stmt.close();c.close();
 			  return id;
 		  }
 	  	} rs.close();stmt.close();c.close();
@@ -102,7 +123,8 @@ public class LeaderBoard{
 	  try {
 		  connect();
 		  stmt = c.createStatement();
-		  String sql = "CREATE TABLE players("
+		  String sql = "DROP TABLE IF EXISTS players;"
+				+  "CREATE TABLE players("
 		  		+ "id  INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,"
 		  		+ "userName TEXT UNIQUE)";
 		  stmt.executeUpdate(sql);
@@ -122,12 +144,13 @@ public class LeaderBoard{
 	  try {
 		  connect();
 		  stmt = c.createStatement();
-		  String sql = "CREATE TABLE GameData("
+		  String sql = "DROP TABLE IF EXISTS GameData;"
+				+  "CREATE TABLE GameData("
 		  		+ "id  INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,"
-		  		+ "userName_id INTEGER"
+		  		+ "userName_id INTEGER,"
 		  		+ "date DATETIME,"
 		  		+ "time DOUBLE,"
-		  		+ "score INTEGER)";
+		  		+ "level INTEGER)";
 		  stmt.executeUpdate(sql);
 		  stmt.close();
 		  c.close();
