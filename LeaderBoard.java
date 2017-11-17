@@ -14,10 +14,7 @@ public class LeaderBoard{
   
   //The main method is only for testing
   public static void main(String[] args){
-	LeaderBoard lb = new LeaderBoard();
-	for (GameRecord gr:lb.playerDateSort("zhaonan")) {
-		System.out.println(gr);
-	}
+	//LeaderBoard lb = new LeaderBoard();
   }
   
   public Connection c = null;
@@ -171,6 +168,41 @@ public class LeaderBoard{
 		  		+ "GameData ON GameData.userName_id = players.id WHERE "
 		  		+ "userName_id =" + id +" ORDER BY GameData.date"
 		  				+ " DESC;");
+		  while (rs.next()) {
+			  String name = rs.getString("userName");
+			  String date = rs.getString("date");
+			  String time = String.valueOf(rs.getDouble("time"));
+			  String lev = String.valueOf(rs.getInt("level"));
+			  GameRecord gr = new GameRecord(name,date,time,lev);
+			  records.add(gr);
+		  }
+		  rs.close();
+	      stmt.close();
+	      c.close();
+	  } catch (Exception e){
+		  System.out.println("There's an error:"+e.getClass().getName()
+				  +": "+e.getMessage());
+		  System.exit(0);
+	  }
+	  return records;
+  }
+  
+//This methods returns an arraylist of GameRecord object sorted
+  //based on the date the game is played
+  public ArrayList<GameRecord> playerTimeSort(String un, int lv){
+	  records.clear();
+	  int id = nameId(un);
+	  try {
+		  connect();
+		  stmt = c.createStatement();
+		  ResultSet rs = stmt.executeQuery("SELECT "
+		  		+ "players.userName, "
+		  		+ "GameData.date, GameData.time,"
+		  		+ "GameData.level FROM players JOIN "
+		  		+ "GameData ON GameData.userName_id = players.id WHERE "
+		  		+ "userName_id =" + id +" AND level=" +lv
+		  		+ " ORDER BY GameData.time"
+		  		+ " ASC;");
 		  while (rs.next()) {
 			  String name = rs.getString("userName");
 			  String date = rs.getString("date");
