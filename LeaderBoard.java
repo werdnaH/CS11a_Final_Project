@@ -12,11 +12,6 @@ import java.util.*;
 
 public class LeaderBoard{
   
-  //The main method is only for testing
-  public static void main(String[] args){
-	//LeaderBoard lb = new LeaderBoard();
-  }
-  
   public Connection c = null;
   public Statement stmt = null;
   public String sql = new String();//sql is command in SQL
@@ -51,7 +46,7 @@ public class LeaderBoard{
 			  stmt.close();
 			  c.commit();
 			  c.close();
-			  System.out.println("name inserted successfully");
+			  //System.out.println("name inserted successfully");
 		  } catch(Exception e) {
 			  System.out.println("There's an error:"+e.getClass().getName()
 					  +": "+e.getMessage());
@@ -78,7 +73,7 @@ public class LeaderBoard{
 		   stmt.close();
 		   c.commit();
 		   c.close();
-		   System.out.println("game data inserted successfully");
+		   //System.out.println("game data inserted successfully");
 	   } catch (Exception e) {
 			  System.out.println("There's an error:"+e.getClass().getName()
 					  +": "+e.getMessage());
@@ -187,7 +182,7 @@ public class LeaderBoard{
 	  return records;
   }
   
-//This methods returns an arraylist of GameRecord object sorted
+  //This methods returns an arraylist of GameRecord object sorted
   //based on the date the game is played
   public ArrayList<GameRecord> playerTimeSort(String un, int lv){
 	  records.clear();
