@@ -10,7 +10,7 @@ public class ResultDisplay {
 	public static void main(String[] args) {
 		ResultDisplay rd = new ResultDisplay();
 		LeaderBoard lb = new LeaderBoard();
-		rd.printResult(lb.playerTimeSort("zhang",3));
+		rd.printResult(lb.playerDateSort("zhaonan"));
 	}
 	
 	public ArrayList<GameRecord> addToFive(ArrayList<GameRecord> gr){
@@ -43,9 +43,8 @@ public class ResultDisplay {
 		} 
 	}
 	public void printDash() {
-		for (int j=0; j<63;j++) {
-			System.out.print("-");
-		}
+		String str = "+--------------------+-----------------------+----------+-----+";
+		System.out.print(str);
 		System.out.println();
 	}
 }
