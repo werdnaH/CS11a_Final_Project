@@ -8,18 +8,14 @@
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 public class LeaderBoard{
-  
-  //The main method is only for testing
-  public static void main(String[] args){
-	LeaderBoard lb = new LeaderBoard();
-	lb.updateGame("Zhaonan", 12.5, 3);
-  }
   
   public Connection c = null;
   public Statement stmt = null;
   public String sql = new String();//sql is command in SQL
+  public ArrayList<GameRecord> records = new ArrayList<GameRecord>();
   
   //This method helps to connect to the leader board database and avoids
   //duplicating code
@@ -45,12 +41,12 @@ public class LeaderBoard{
 			  c.setAutoCommit(false);
 			  stmt = c.createStatement();
 			  sql = "INSERT INTO players (userName) " 
-			  		+"VALUES(\""+ name +"\");";
+			  		+"VALUES(\""+ name.toUpperCase() +"\");";
 			  stmt.executeUpdate(sql);
 			  stmt.close();
 			  c.commit();
 			  c.close();
-			  System.out.println("name inserted successfully");
+			  //System.out.println("name inserted successfully");
 		  } catch(Exception e) {
 			  System.out.println("There's an error:"+e.getClass().getName()
 					  +": "+e.getMessage());
@@ -70,14 +66,14 @@ public class LeaderBoard{
 		   stmt = c.createStatement();
 		   sql = "INSERT INTO GameData (userName_id,date,time,level) " 
 				  	+"VALUES("+ id +","
-				  	+ "\"" + getTime() +"\""
+				  	+ "\"" + getDateTime() +"\""
 				  	+ ","+ tm + "," + level
 				  	+ ");";
 		   stmt.executeUpdate(sql);
 		   stmt.close();
 		   c.commit();
 		   c.close();
-		   System.out.println("game data inserted successfully");
+		   //System.out.println("game data inserted successfully");
 	   } catch (Exception e) {
 			  System.out.println("There's an error:"+e.getClass().getName()
 					  +": "+e.getMessage());
@@ -87,13 +83,14 @@ public class LeaderBoard{
   }
   
   //This method returns current time in desired format
-  public String getTime() {
+  public String getDateTime() {
 	  LocalDateTime now = LocalDateTime.now();
 	  DateTimeFormatter formatter = DateTimeFormatter.ofPattern(
 			  "yyyy-MM-dd HH:mm:ss");
 	  String time = now.format(formatter);
 	  return time;
   }
+  
   //This method checks if the user name is taken. If name doesn't
   //exist, it returns -1
   public int nameId(String name) {
@@ -116,6 +113,108 @@ public class LeaderBoard{
 		  System.exit(0);
 	  }
 	  return -1;
+  }
+  
+  //This method returns an arraylist of object GameRecord, based on
+  //time taken for certain level of difficulty for all players
+  public ArrayList<GameRecord> orderByTime (int level) {
+	  records.clear();
+	  try {
+		  connect();
+		  stmt = c.createStatement();
+		  ResultSet rs = stmt.executeQuery("SELECT "
+		  		+ "players.userName, "
+		  		+ "GameData.date, GameData.time,"
+		  		+ "GameData.level FROM players JOIN "
+		  		+ "GameData ON GameData.userName_id = players.id WHERE "
+		  		+ "level=" + level +" ORDER BY GameData.time"
+		  				+ " ASC;");
+		  while (rs.next()) {
+			  String name = rs.getString("userName");
+			  String date = rs.getString("date");
+			  String time = String.valueOf(rs.getDouble("time"));
+			  String lev = String.valueOf(rs.getInt("level"));
+			  GameRecord gr = new GameRecord(name,date,time,lev);
+			  records.add(gr);
+		  }
+		  rs.close();
+		  stmt.close();
+		  c.close();
+	  } catch (Exception e){
+		  System.out.println("There's an error:"+e.getClass().getName()
+				  +": "+e.getMessage());
+		  System.exit(0);
+	  }
+	  return records;
+  }
+  
+  //This methods returns an arraylist of GameRecord object sorted
+  //based on the date the game is played
+  public ArrayList<GameRecord> playerDateSort(String un){
+	  records.clear();
+	  int id = nameId(un);
+	  try {
+		  connect();
+		  stmt = c.createStatement();
+		  ResultSet rs = stmt.executeQuery("SELECT "
+		  		+ "players.userName, "
+		  		+ "GameData.date, GameData.time,"
+		  		+ "GameData.level FROM players JOIN "
+		  		+ "GameData ON GameData.userName_id = players.id WHERE "
+		  		+ "userName_id =" + id +" ORDER BY GameData.date"
+		  				+ " DESC;");
+		  while (rs.next()) {
+			  String name = rs.getString("userName");
+			  String date = rs.getString("date");
+			  String time = String.valueOf(rs.getDouble("time"));
+			  String lev = String.valueOf(rs.getInt("level"));
+			  GameRecord gr = new GameRecord(name,date,time,lev);
+			  records.add(gr);
+		  }
+		  rs.close();
+	      stmt.close();
+	      c.close();
+	  } catch (Exception e){
+		  System.out.println("There's an error:"+e.getClass().getName()
+				  +": "+e.getMessage());
+		  System.exit(0);
+	  }
+	  return records;
+  }
+  
+  //This methods returns an arraylist of GameRecord object sorted
+  //based on the date the game is played
+  public ArrayList<GameRecord> playerTimeSort(String un, int lv){
+	  records.clear();
+	  int id = nameId(un);
+	  try {
+		  connect();
+		  stmt = c.createStatement();
+		  ResultSet rs = stmt.executeQuery("SELECT "
+		  		+ "players.userName, "
+		  		+ "GameData.date, GameData.time,"
+		  		+ "GameData.level FROM players JOIN "
+		  		+ "GameData ON GameData.userName_id = players.id WHERE "
+		  		+ "userName_id =" + id +" AND level=" +lv
+		  		+ " ORDER BY GameData.time"
+		  		+ " ASC;");
+		  while (rs.next()) {
+			  String name = rs.getString("userName");
+			  String date = rs.getString("date");
+			  String time = String.valueOf(rs.getDouble("time"));
+			  String lev = String.valueOf(rs.getInt("level"));
+			  GameRecord gr = new GameRecord(name,date,time,lev);
+			  records.add(gr);
+		  }
+		  rs.close();
+	      stmt.close();
+	      c.close();
+	  } catch (Exception e){
+		  System.out.println("There's an error:"+e.getClass().getName()
+				  +": "+e.getMessage());
+		  System.exit(0);
+	  }
+	  return records;
   }
   
   //This method creates a table in the database for storing players' user names
