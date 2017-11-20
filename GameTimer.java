@@ -17,7 +17,7 @@ public class GameTimer {
 	}
 
 	public double getTime() {
-		double time = (double) (endTime - startTime)/1000;
+		double time = (double) (endTime - startTime)/1000;//is this the milliseconds
 		time = Double.parseDouble(String.format("%.1f", time));
 		if(time>100000||time<0) {
 			return -1;
