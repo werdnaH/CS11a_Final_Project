@@ -19,6 +19,9 @@ public class GameTimer {
 	public double getTime() {
 		double time = (double) (endTime - startTime)/1000;
 		time = Double.parseDouble(String.format("%.1f", time));
+		if(time>100000) {
+			return -1;
+		}
 		return time;
 	}
 }
