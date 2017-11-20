@@ -17,20 +17,20 @@ public class Field {
       Scanner sc = new Scanner(System.in);
       if(sc.hasNextLine()){
         s = sc.nextLine();
-        if(s.equals("Easy")||s.equals("easy")){
+        if(s.toUpperCase().equals("EASY")){
           System.out.println("Easy");
           b = false;
           m = 3;
           n = 3;
           nb = 2;
         }
-        else if(s.equals("Medium")||s.equals("medium")){
+        else if(s.toUpperCase().equals("MEDIUM")){
           b = false;
           m = 9;
           n = 9;
           nb = 10;
         }
-        else if(s.equals("Hard")||s.equals("hard")){
+        else if(s.toUpperCase().equals("HARD")){
           b = false;
           m = 16;
           n = 16;
