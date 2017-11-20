@@ -2,7 +2,7 @@ public class Number extends Block{
   public int n;
   public Number() {
     super();
-    n = -1;
+    n = 0;
     type = "Number";
   }
   @Override

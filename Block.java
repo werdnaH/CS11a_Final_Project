@@ -50,17 +50,5 @@ public abstract class Block {
       s = "?";
     }
   } //set question mark
-  public void df() {// stands for deflag
-    isf = false;
-
-
-
-  }
-  public void dq() {// stands for dequesiton mark
-    isq = false;
-
-
-
-  }
   public abstract void click();
 }

@@ -68,19 +68,17 @@ public class Field {
       for(int j = 0; j < f[0].length; j++){
         int x = i-1;
         int y = j-1;
-        int a = 0;
         bigloop: while (x <= i+1) {
           try {
             smallloop: while(y <= j+1){
               try{
                 if(f[x][y].type.equals("Bomb") && (x != i || y != j) && f[i][j] == null){
                   f[i][j] = new Number();
-                  a++;
-                  f[i][j].s = String.valueOf(a);
+                  ((Number)f[i][j]).n++;
+                  f[i][j].s = String.valueOf(((Number)f[i][j]).n);
                 } else if (f[x][y].type.equals("Bomb")&&(x != i || y != j) && f[i][j].s != "B") {
-                  a++;
-                  f[i][j].s = String.valueOf(a);
-                  ((Number)f[i][j]).n = a;
+                  ((Number)f[i][j]).n++;
+                  f[i][j].s = String.valueOf(((Number)f[i][j]).n);
                 }
                 y++;
                 //} catch (ArrayIndexOutOfBoundsException e) {
@@ -215,39 +213,39 @@ public void click(int i, int j) {
   print();
 }
 public void lrClick(int a, int b){
+  if(!lrClickCheck(a,b))
+	  return;
   for(int i = a+1; i>a-2; i--){
     for(int j = b+1; j>b-2; j--){
       if(j<0||i<0||i>=m||j>=n){
         continue;
       }
-      if(i!=a||j!=b){
-        if(f[i][j].type == "Bomb"&&f[i][j].isf==false){
-          System.out.println("Game Over");
-          f[i][j].ic = true;
-          print();
-          return;
-        }
-        if(f[i][j].type == "Blank") {
-          ((Blank)f[i][j]).click();
-          BlankHelper(i,j);
-        }
-        if(f[i][j].type == "Number") {
-          f[i][j].ic = true;
-          if(iswin()) {
-            for(int i1 = 0; i1 < f.length; i1++){
-              for(int j1 = 0; j1 < f[0].length; j1++){
-                if(f[i1][j1].type.equals("Bomb")) {
-                  f[i1][j1].setFlag();
-                }
-              }
-            }
-          }
-        }
-        print();
-
-      }
+      if(f[i][j].isf)
+        continue;
+      else
+        f[i][j].click();  
     }
   }
+  print();
+}
+public boolean lrClickCheck(int a, int b) {
+	if(!(f[a][b]).type.equals("Number") || f[a][b].ic != true)
+		return false;
+	int x = 0;
+	for(int i = a+1; i>a-2; i--){
+	    for(int j = b+1; j>b-2; j--){
+	      if(j<0||i<0||i>=m||j>=n){
+	        continue;
+	      }
+	      if(f[i][j].isf) {
+	    	  x++;
+	      }
+	    }
+	}
+	if(x == ((Number)f[a][b]).n)
+		return true;
+	else 
+		return false;
 }
 public void BlankHelper(int i, int j){
   int x = i-1;
