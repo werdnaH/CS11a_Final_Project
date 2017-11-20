@@ -4,8 +4,9 @@ public class Field {
   private int m,n; //m and n should be larger than 2
   private int nb; //num of bombs
   private String s;
-  boolean b= true;
-
+  boolean b = true;
+  GameTimer t = new GameTimer();
+  boolean timehelper = true;// this allows to start timing only at the first time
   public Field(){
     getLevel();
     f = new Block[m][n];
@@ -134,7 +135,10 @@ public void operate(){
   do{
     try{
       s = sc.nextLine();
-
+      if(timehelper) {
+        t.start();
+        timehelper = false;
+      }
       switch(s.substring(0,1)) {
         case"f":
         row = Integer.parseInt(s.replaceAll("\\s+","").substring(1,s.replaceAll("\\s+","").indexOf(",")));
@@ -159,13 +163,10 @@ public void operate(){
         click(row,col);
         break;
       }
-      for(Block[] i: f){
-        for(Block j : i){
-          if(j.type == "Bomb" && j.ic) {
-            System.out.println("You Lose");
-            return;
-          }
-        }
+      if(isLose()) {
+        System.out.println("You Lose");
+        t.end();
+        return;
       }
       if(!iswin())
       System.out.println("Continue");
@@ -174,8 +175,20 @@ public void operate(){
       continue;
     }
   } while(!iswin());
+  t.end();
   System.out.println("You Win");
 }
+public boolean isLose() {
+  for(Block[] i: f){
+    for(Block j : i){
+      if(j.type == "Bomb" && j.ic) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
 public void click(int i, int j) {
   if(f[i][j].type == "Bomb"){
     System.out.println("Game Over");
@@ -305,6 +318,7 @@ public void BlankHelper(int i, int j){
       System.out.println();
       test.print();
       test.operate();
+      System.out.println("Time :" + test.t.getTime());
       //test.click(2);
     }
   }
