@@ -3,40 +3,42 @@ public class Field {
   public Block[][] f;// f stands for field
   private int m,n; //m and n should be larger than 2
   private int nb; //num of bombs
+  private String s;
+  boolean b= true;
+
   public Field(){
-    Scanner sc = new Scanner(System.in);
-    boolean b= true;
-    do{
-      System.out.println("Enter # of rows: ");
-      if(sc.hasNextInt()){
-        m = sc.nextInt();
-        if(m>0){
-          b = false;
-        }
-      }
-    }while(b);
-    b = true;
-    do{
-      System.out.println("Enter # of columns: ");
-      if(sc.hasNextInt()){
-        n = sc.nextInt();
-        if(n>0){
-          b = false;
-        }
-      }
-    }while(b);
-    b = true;
-    do{
-      System.out.println("Enter # of Bombs: ");
-      if(sc.hasNextInt()){
-        nb = sc.nextInt();
-        if((nb<m*n)&&(nb>0)){
-          b = false;
-        }
-      }
-    }while(b);
+    getLevel();
     f = new Block[m][n];
   }
+  public void getLevel(){
+    do{
+      System.out.printf("Choose a level: Easy, medium or hard: %n");
+      Scanner sc = new Scanner(System.in);
+      if(sc.hasNextLine()){
+        s = sc.nextLine();
+        if(s.equals("Easy")||s.equals("easy")){
+          System.out.println("Easy");
+          b = false;
+          m = 3;
+          n = 3;
+          nb = 2;
+        }
+        else if(s.equals("Medium")||s.equals("medium")){
+          b = false;
+          m = 9;
+          n = 9;
+          nb = 10;
+        }
+        else if(s.equals("Hard")||s.equals("hard")){
+          b = false;
+          m = 16;
+          n = 16;
+          nb = 40;
+        }
+      }
+    }while(b);
+  }
+
   // generate the bombs, x stands for number of Bombs
   public void generateb() {
     int x = nb;
