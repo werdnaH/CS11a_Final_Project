@@ -1,4 +1,6 @@
+import java.util.ArrayList;
 import java.util.Scanner;
+
 public class Field {
   public Block[][] f;// f stands for field
   private int m,n; //m and n should be larger than 2
@@ -7,6 +9,11 @@ public class Field {
   boolean b = true;
   GameTimer t = new GameTimer();
   boolean timehelper = true;// this allows to start timing only at the first time
+  LeaderBoard lb = new LeaderBoard();
+  ArrayList<GameRecord> records = new ArrayList<GameRecord>();
+  int dif = 0;//difficulty
+  ResultDisplay rd = new ResultDisplay();
+  
   public Field(){
     getLevel();
     f = new Block[m][n];
@@ -23,18 +30,21 @@ public class Field {
           m = 3;
           n = 3;
           nb = 2;
+          dif = 1;
         }
         else if(s.toUpperCase().equals("MEDIUM")){
           b = false;
           m = 9;
           n = 9;
           nb = 10;
+          dif = 2;
         }
         else if(s.toUpperCase().equals("HARD")){
           b = false;
           m = 16;
           n = 16;
           nb = 40;
+          dif = 3;
         }
       }
     }while(b);
@@ -316,7 +326,17 @@ public void BlankHelper(int i, int j){
       System.out.println();
       test.print();
       test.operate();
-      System.out.println("Time :" + test.t.getTime());
-      //test.click(2);
+      if (test.iswin()) {
+    	  	double time = test.t.getTime();
+    	  	System.out.println("What's your name?");
+    	 
+    	  	Scanner sc = new Scanner(System.in);
+    	  	String userName = sc.nextLine();
+    	  	test.lb.updateName(userName);
+    	  	test.lb.updateGame(userName,time,test.dif);
+    	  	test.records = test.lb.orderByTime(test.dif);
+    	  	test.rd.printResult(test.records);
+      }
     }
+    
   }
