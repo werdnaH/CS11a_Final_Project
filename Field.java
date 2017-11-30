@@ -190,7 +190,7 @@ public boolean isLose() {
   for(Block[] i: f){
     for(Block j : i){
       if(j.type == "Bomb" && j.ic) {
-	new Se();
+	new BombSound();
         return true;
       }
     }
