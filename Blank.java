@@ -5,7 +5,7 @@ public class Blank extends Block {
   }
   @Override
   public void click() {
-    new FlagSound();
+    new ClickSound();
     ic = true;
     s = "#";
   }
