@@ -13,6 +13,7 @@ public abstract class Block {
     type = null;
   }
   public void setFlag() {
+    new FlagSound();
     if(ic == true){
       ;
     } else if(isf == true) {
