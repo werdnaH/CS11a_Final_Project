@@ -7,7 +7,6 @@ public class Number extends Block{
   }
   @Override
   public void click() {
-    new ClickSound();
     ic = true;
   }
 

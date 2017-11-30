@@ -28,19 +28,14 @@ public class BombSound {
     }
 
     clip.start();
-    stop(3000);
-    clip.stop();
-  }
-
-    public static void stop(int time){
+    do {
       try {
-        Thread.sleep(5000);
+        Thread.sleep(50);
       } catch (Exception e){
         System.out.println(e);
       }
+    } while(clip.isActive());
   }
-
-
 
   public static void main(String[] args) {
     new BombSound();

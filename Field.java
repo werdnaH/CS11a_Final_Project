@@ -13,7 +13,7 @@ public class Field {
   ArrayList<GameRecord> records = new ArrayList<GameRecord>();
   int dif = 0;//difficulty
   ResultDisplay rd = new ResultDisplay();
-  
+
   public Field(){
     getLevel();
     f = new Block[m][n];
@@ -25,7 +25,6 @@ public class Field {
       if(sc.hasNextLine()){
         s = sc.nextLine();
         if(s.toUpperCase().equals("EASY")){
-          System.out.println("Easy");
           b = false;
           m = 3;
           n = 3;
@@ -206,6 +205,17 @@ public void click(int i, int j) {
     return;
   }
   if(f[i][j].type == "Number") {
+    Thread thread = new Thread() {
+      public void run() {
+        new ClickSound();
+        try {
+          this.sleep(50);
+        } catch(Exception e) {
+          ;
+        }
+      }
+    };
+    thread.start();
     f[i][j].ic = true;
     if(iswin()) {
       for(int i1 = 0; i1 < f.length; i1++){
@@ -218,6 +228,17 @@ public void click(int i, int j) {
     }
   }
   if(f[i][j].type == "Blank") {
+    Thread thread = new Thread() {
+      public void run() {
+        new ClickSound();
+        try {
+          this.sleep(50);
+        } catch(Exception e) {
+          ;
+        }
+      }
+    };
+    thread.start();
     ((Blank)f[i][j]).click();
     BlankHelper(i,j);
   }
@@ -234,7 +255,7 @@ public void lrClick(int a, int b){
       if(f[i][j].isf)
         continue;
       else
-        f[i][j].click();  
+        f[i][j].click();
     }
   }
   print();
@@ -255,7 +276,7 @@ public boolean lrClickCheck(int a, int b) {
 	}
 	if(x == ((Number)f[a][b]).n)
 		return true;
-	else 
+	else
 		return false;
 }
 public void BlankHelper(int i, int j){
@@ -330,7 +351,7 @@ public void BlankHelper(int i, int j){
       if (test.iswin()) {
     	  	double time = test.t.getTime();
     	  	System.out.println("What's your name?");
-    	 
+
     	  	Scanner sc = new Scanner(System.in);
     	  	String userName = sc.nextLine();
     	  	test.lb.updateName(userName);
@@ -339,5 +360,5 @@ public void BlankHelper(int i, int j){
     	  	test.rd.printResult(test.records);
       }
     }
-    
+
   }
