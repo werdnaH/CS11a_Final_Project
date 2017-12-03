@@ -3,9 +3,9 @@ import java.util.Scanner;
 
 public class Field {
   public Block[][] f;// f stands for field
-  private int m,n; //m and n should be larger than 2
-  private int nb; //num of bombs
-  private String s;
+  public int m,n; //m and n should be larger than 2
+  public int nb; //num of bombs
+  public String s;
   boolean b = true;
   GameTimer t = new GameTimer();
   boolean timehelper = true;// this allows to start timing only at the first time
