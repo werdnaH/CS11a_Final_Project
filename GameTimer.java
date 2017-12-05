@@ -2,7 +2,7 @@
  * GameTimer is an object for recording time taken for each game
  * @author Zhaonan Li
  */
-
+package CS11a_Final_Project;
 public class GameTimer {
 
 	public long startTime;

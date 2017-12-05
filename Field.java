@@ -1,18 +1,18 @@
+package CS11a_Final_Project;
 import java.util.ArrayList;
 import java.util.Scanner;
-
 public class Field {
   public Block[][] f;// f stands for field
-  public int m,n; //m and n should be larger than 2
-  public int nb; //num of bombs
+  public static int m,n; //m and n should be larger than 2
+  public static int nb; //num of bombs
   public String s;
-  boolean b = true;
-  GameTimer t = new GameTimer();
-  boolean timehelper = true;// this allows to start timing only at the first time
-  LeaderBoard lb = new LeaderBoard();
-  ArrayList<GameRecord> records = new ArrayList<GameRecord>();
-  int dif = 0;//difficulty
-  ResultDisplay rd = new ResultDisplay();
+  public boolean b = true;
+  public GameTimer t = new GameTimer();
+  public boolean timehelper = true;// this allows to start timing only at the first time
+  public LeaderBoard lb = new LeaderBoard();
+  public ArrayList<GameRecord> records = new ArrayList<GameRecord>();
+  public int dif = 0;//difficulty
+  public ResultDisplay rd = new ResultDisplay();
 
   public Field(){
     getLevel();
@@ -280,36 +280,21 @@ public boolean lrClickCheck(int a, int b) {
 		return false;
 }
 public void BlankHelper(int i, int j){
-  int x = i-1;
-  int y = j-1;
-  int a = 0;
-  bigloop: while (x <= i+1) {
-    try{
-          smallloop: while(y <= j+1) {
-            try{
-              if(f[x][y].type == "Blank" && f[x][y].ic == false && (x != i || y != j) && f[x][y].isf == false){
-                f[x][y].click();
-                this.BlankHelper(x,y);
-              }
-              if(f[x][y].type == "Number" && f[x][y].isf == false) {
-                f[x][y].click();
-              }
-              y++;
-              //} catch (ArrayIndexOutOfBoundsException e) {
-            } catch (Exception e) {
-              y++;
-              continue smallloop;
-            }
+	for(int x = i+1; x>i-2; x--){
+	    for(int y = j+1; y>j-2; y--){
+	      if(j<0||i<0||i>=m||j>=n){
+	        continue;
+	      }
+	      if(f[x][y].type == "Blank" && f[x][y].ic == false && (x != i || y != j) && f[x][y].isf == false){
+              f[x][y].click();
+              this.BlankHelper(x,y);
           }
-          x++;
-          y = j - 1;
-          //} catch (ArrayIndexOutOfBoundsException e) {
-        } catch (Exception e) {
-          x++;
-          continue bigloop;
-        }
-      }
-    }
+	      if(f[x][y].type == "Number" && f[x][y].isf == false) {
+              f[x][y].click();
+          }
+	    }
+	}
+}
     //determine if the game is end
     public boolean iswin() {
       for(Block[] i : f) {
@@ -325,26 +310,13 @@ public void BlankHelper(int i, int j){
       }
       return true;
     }
-    public static void main(String[] args){
+    /*public static void main(String[] args){
       Field test = new Field();
-
-      System.out.println(test.m);
-      System.out.println(test.n);
-      System.out.println(test.f);
       //The sequence should be 1 generateb 2 generaten 3 generateb1
       test.generateb();
       test.generaten();
       test.generateb1();
       System.out.println("Loading...");
-      for(int i = 0; i < test.f.length; i++) {
-        for(int j = 0; j < test.f[0].length; j++) {
-          if(test.f[i][j] != null)
-            System.out.print(test.f[i][j].s + " ");
-          else
-            System.out.print(0);
-        }
-        System.out.println();
-      }
       System.out.println();
       test.print();
       test.operate();
@@ -359,6 +331,6 @@ public void BlankHelper(int i, int j){
     	  	test.records = test.lb.orderByTime(test.dif);
     	  	test.rd.printResult(test.records);
       }
-    }
+    }*/
 
   }

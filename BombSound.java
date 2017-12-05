@@ -1,6 +1,7 @@
 /*
 reference: https://www.ntu.edu.sg/home/ehchua/programming/java/J8c_PlayingSound.html
 */
+package CS11a_Final_Project;
 import java.io.*;
 import java.net.URL;
 import javax.sound.sampled.*;
@@ -8,6 +9,7 @@ public class BombSound {
   private Clip clip;
   private Mixer mixer;
   public BombSound() {
+
     makeSound();
   }
   public void makeSound() {
@@ -38,6 +40,7 @@ public class BombSound {
   }
 
   public static void main(String[] args) {
+    System.out.println(1);
     new BombSound();
   }
 }
