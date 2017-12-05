@@ -24,29 +24,35 @@ public class Field {
       Scanner sc = new Scanner(System.in);
       if(sc.hasNextLine()){
         s = sc.nextLine();
+        m = Ls(s);
+        n = Ls(s);
         if(s.toUpperCase().equals("EASY")){
-          b = false;
-          m = 3;
-          n = 3;
           nb = 2;
           dif = 1;
         }
         else if(s.toUpperCase().equals("MEDIUM")){
-          b = false;
-          m = 9;
-          n = 9;
           nb = 10;
           dif = 2;
         }
         else if(s.toUpperCase().equals("HARD")){
-          b = false;
-          m = 16;
-          n = 16;
           nb = 40;
           dif = 3;
         }
       }
-    }while(b);
+    }while(m == 0);
+  }
+
+  public static int Ls(String s) {
+    if(s.toUpperCase().equals("EASY")){
+      return 3;
+    }
+    else if(s.toUpperCase().equals("MEDIUM")){
+      return 9;
+    }
+    else if(s.toUpperCase().equals("HARD")){
+      return 16;
+    }
+    return 0;
   }
 
   // generate the bombs, x stands for number of Bombs

@@ -3,7 +3,6 @@ import CS11a_Final_Project.*;
 public class Launcher {
   public static void main(String[] args){
     Field test = new Field();
-    //The sequence should be 1 generateb 2 generaten 3 generateb1
     test.generateb();
     test.generaten();
     test.generateb1();
@@ -13,7 +12,6 @@ public class Launcher {
     if (test.iswin()) {
         double time = test.t.getTime();
         System.out.println("What's your name?");
-
         Scanner sc = new Scanner(System.in);
         String userName = sc.nextLine();
         test.lb.updateName(userName);
