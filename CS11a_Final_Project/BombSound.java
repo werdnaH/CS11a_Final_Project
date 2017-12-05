@@ -8,9 +8,15 @@ import javax.sound.sampled.*;
 public class BombSound {
   private Clip clip;
   private Mixer mixer;
+  /**
+  * Constructor
+  */
   public BombSound() {
     makeSound();
   }
+  /**
+  * Perferm the operation of making sounds
+  */
   public void makeSound() {
     Mixer.Info[] mixInfos = AudioSystem.getMixerInfo();
     mixer = AudioSystem.getMixer(mixInfos[0]);

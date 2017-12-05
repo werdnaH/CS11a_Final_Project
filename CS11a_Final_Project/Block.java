@@ -5,7 +5,9 @@ public abstract class Block {
   public boolean isq;
   public String s;
   public String type;
-
+  /**
+  * Constructor
+  */
   public Block(){
     isf = false;
     isq = false;
@@ -13,6 +15,9 @@ public abstract class Block {
     s = "N"; // for testing
     type = null;
   }
+  /**
+  * Perferm the operation of setting flags
+  */
   public void setFlag() {
     new FlagSound();
     if(ic == true){
@@ -33,6 +38,9 @@ public abstract class Block {
       isf = true;
     }
   }
+  /**
+  * Perferm the operation of setting question marks
+  */
   public void setqm() {
     if(ic == true){
       ;

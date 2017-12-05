@@ -12,6 +12,9 @@ public class ClickSound {
   public ClickSound() {
     makeSound();
   }
+  /**
+  * Perferm the operation of making sounds
+  */
   public void makeSound() {
     Mixer.Info[] mixInfos = AudioSystem.getMixerInfo();
     mixer = AudioSystem.getMixer(mixInfos[0]);
@@ -28,22 +31,15 @@ public class ClickSound {
     } catch(Exception e) {
       System.out.println(e);
     }
-
-    clip.start();
-    stop(1000);
-    clip.stop();
-  }
-
-
-  public static void stop(int time){
+    do {
       try {
-        Thread.sleep(1000);
+        Thread.sleep(50);
       } catch (Exception e){
         System.out.println(e);
       }
+    } while(clip.isActive());
   }
-
-
+  
   public static void main(String[] args) {
     new ClickSound();
   }

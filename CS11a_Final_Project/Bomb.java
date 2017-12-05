@@ -6,6 +6,9 @@ public class Bomb extends Block {
     type = "Bomb";
   }
   @Override
+  /**
+  * Perferm the operation of clicking one block
+  */
   public void click() {
     ic = true;
     s = "B";

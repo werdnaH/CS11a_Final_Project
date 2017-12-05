@@ -9,9 +9,15 @@ import javax.sound.sampled.*;
 public class FlagSound {
   private Clip clip;
   private Mixer mixer;
+  /**
+  * Constructor
+  */
   public FlagSound() {
     makeSound();
   }
+  /**
+  * Perferm the operation of making sounds
+  */
   public void makeSound() {
     Mixer.Info[] mixInfos = AudioSystem.getMixerInfo();
     mixer = AudioSystem.getMixer(mixInfos[0]);

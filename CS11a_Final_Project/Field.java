@@ -13,11 +13,16 @@ public class Field {
   public ArrayList<GameRecord> records = new ArrayList<GameRecord>();
   public int dif = 0;//difficulty
   public ResultDisplay rd = new ResultDisplay();
-
+  /**
+  * Constructor
+  */
   public Field(){
     getLevel();
     f = new Block[m][n];
   }
+  /**
+  * Perferm the operation of getting level
+  */
   public void getLevel(){
     do{
       System.out.printf("Choose a level: Easy, medium or hard: %n");
@@ -41,7 +46,11 @@ public class Field {
       }
     }while(m == 0);
   }
-
+  /**
+  * Perferm the operation of making sounds
+  * @param s the input of choosing the level
+  * @return the size of the board
+  */
   public static int Ls(String s) {
     if(s.toUpperCase().equals("EASY")){
       return 3;
@@ -56,6 +65,9 @@ public class Field {
   }
 
   // generate the bombs, x stands for number of Bombs
+  /**
+  * Perferm the operation of generating bombs
+  */
   public void generateb() {
     int x = nb;
     while(true) {
@@ -78,6 +90,9 @@ public class Field {
     }
   }
   // generate the numbers
+  /**
+  * Perferm the operation of generating the numbers
+  */
   public void generaten() {
     for(int i = 0; i < f.length; i++){
       for(int j = 0; j < f[0].length; j++){
@@ -114,6 +129,9 @@ public class Field {
     }
   }
   //generate blanks
+  /**
+  * Perferm the operation of generating blanks
+  */
   public void generateb1() {
     for(int i = 0; i < f.length; i++){
       for(int j =0; j<f[i].length; j++) {
@@ -125,6 +143,9 @@ public class Field {
   }
 
   //print the Field
+  /**
+  * Perferm the operation of printing the board
+  */
   public void print() {
     for(int i = 0; i < f.length; i++) {
       for(int j = 0; j < f[0].length; j++) {
@@ -137,7 +158,9 @@ public class Field {
       System.out.println();
     }
   }
-
+  /**
+  * Perferm the operation of main function of minesweepr
+  */
 public void operate(){
   Scanner sc = new Scanner(System.in);
   int row, col;
@@ -191,6 +214,10 @@ public void operate(){
   t.end();
   System.out.println("You Win");
 }
+/**
+* Perferm the operation of if the user lose the Game
+* @return true if the user loses
+*/
 public boolean isLose() {
   for(Block[] i: f){
     for(Block j : i){
@@ -202,7 +229,11 @@ public boolean isLose() {
   }
   return false;
 }
-
+/**
+* Perferm the operation of clicking
+* @param i the row coordinator
+* @param j the column coordinator
+*/
 public void click(int i, int j) {
   if(f[i][j].type == "Bomb"){
     System.out.println("Game Over");
@@ -250,6 +281,13 @@ public void click(int i, int j) {
   }
   print();
 }
+/**
+* Perferm the operation of right left click that click all the sorrounding
+* blocks if the the block is nuber and the # of surronding flags equals to
+* the numbers
+*@param a the row coordinator
+*@param b the column coordinator
+*/
 public void lrClick(int a, int b){
   if(!lrClickCheck(a,b))
 	  return;
@@ -266,6 +304,12 @@ public void lrClick(int a, int b){
   }
   print();
 }
+/**
+* check if the block satisfy the condition to be right left right clicked
+* @param a the row coordinator
+* @param b the column coordinator
+* @return true if it satisfies
+*/
 public boolean lrClickCheck(int a, int b) {
 	if(!(f[a][b]).type.equals("Number") || f[a][b].ic != true)
 		return false;
@@ -285,6 +329,11 @@ public boolean lrClickCheck(int a, int b) {
 	else
 		return false;
 }
+/**
+* Help to click the blanks
+* @param i the row coordinator
+* @param j the column coordinator
+*/
 public void BlankHelper(int i, int j){
 	for(int x = i+1; x>i-2; x--){
 	    for(int y = j+1; y>j-2; y--){
@@ -302,6 +351,10 @@ public void BlankHelper(int i, int j){
 	}
 }
     //determine if the game is end
+    /**
+    * Perferm the operation of checking if the user wins
+    * @return true if the user win
+    */
     public boolean iswin() {
       for(Block[] i : f) {
         for(Block j : i) {
