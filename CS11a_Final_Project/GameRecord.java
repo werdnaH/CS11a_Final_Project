@@ -2,6 +2,8 @@
  * GameRecord is an object for storing information for each game
  * @author Zhaonan Li
  */
+package CS11a_Final_Project;
+
 public class GameRecord {
 	public String name;
 	public String date;
