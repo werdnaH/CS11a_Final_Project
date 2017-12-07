@@ -68,10 +68,13 @@ public class BattleshipGame{
   public static void main(String[] args){
 
     getPlayerNames();
-
+    System.out.print("Enter the starting coordinates, followed by the ending");
+    System.out.print(" coordinates, of where you want to play each ship. Place");
+    System.out.println(" one integer on each line.");
     board1Set(p1);
     board2Set(p2);
     System.out.println("We are ready to begin!");
+    System.out.println("Set the coordinates of the ship you want to hit!");
 
     createPBoards();
 
@@ -268,7 +271,7 @@ public class BattleshipGame{
   @return is the coordinate the user inputted.
   */
   public static int getBoardInput(){
-    int x = 0;
+    int x = -1;
     do
     if(scan.hasNextInt()){
       x = scan.nextInt()-1;
@@ -279,7 +282,7 @@ public class BattleshipGame{
     else{
       scan.next();
       System.out.println("Enter valid integer coordinates: ");
-    }while(x==0);
+    }while(x==-1);
     return x;
   }
 
