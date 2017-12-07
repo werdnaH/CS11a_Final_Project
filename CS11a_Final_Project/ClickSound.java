@@ -1,4 +1,4 @@
-/*
+/**
 This class allows the Minesweeper program to make a sound whenever the user clicks a new block.
 reference: https://www.ntu.edu.sg/home/ehchua/programming/java/J8c_PlayingSound.html
 */
