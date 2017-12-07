@@ -224,6 +224,7 @@ public void operate(){
 
 /**
 Performs the operation of parsing the input of the user.
+@param s is the input to be parsed.
 */
 
 public void parseUserInput(String s){
