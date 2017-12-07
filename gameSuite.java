@@ -13,7 +13,7 @@ public class gameSuite{
       if(scan.hasNext()){
         String s = scan.next();
         if(s.equals("1")){
-          Field.main(null);
+          MinesweeperLauncher.main(null);
         }
         else if(s.equals("2")){
           BattleshipGame.main(null);
