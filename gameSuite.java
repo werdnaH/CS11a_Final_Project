@@ -1,9 +1,22 @@
+/**
+This is the ultimate main class of our program. It introduces the user to
+our game suite and allows them to chosoe from one of three games. After they've
+finished the game, we give them the same option of the three games.
+*/
+
 import java.util.*;
 
 public class gameSuite{
 
+  /**
+  This scanner reads in the input of the user.
+  */
   public static Scanner scan = new Scanner(System.in);
 
+  /**
+  The main method, which runs the entire game suite.
+  @param args is an array of strings that is ignored.
+  */
   public static void main(String[] args){
     System.out.println("Welcome to our game suite!");
     boolean b = true;
