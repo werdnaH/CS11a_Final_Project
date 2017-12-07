@@ -1,4 +1,5 @@
-/*
+/**
+This class lets the Minesweeper program play a bomb sound whenever someone clicks on a mine.
 reference: https://www.ntu.edu.sg/home/ehchua/programming/java/J8c_PlayingSound.html
 */
 package CS11a_Final_Project;
