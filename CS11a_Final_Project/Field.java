@@ -1,3 +1,8 @@
+/**
+Field contains the majority of the methods that make the Minesweeper program
+run.
+*/
+
 package CS11a_Final_Project;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -5,13 +10,12 @@ public class Field {
   /**
   f is the 2D array in which the bombs are stored. f stands for field.
   */
-  public Block[][] f;// f stands for field
-
+  public static Block[][] f;
   public static int m,n; //m and n should be larger than 2
   /**
   nb is the number of bombs
   */
-  public static int nb; //num of bombs
+  public static int nb;
   /**
   b is a boolean accessed by multiple methods
   */
@@ -24,13 +28,21 @@ public class Field {
   timehelper allows the timing to start only once.
   */
   public boolean timehelper = true;
-  public String s;
   /**
   lb is a leaderboard that can return the leaderboard
   */
   public LeaderBoard lb = new LeaderBoard();
+  /**
+  records is an object that stores the times and difficulty
+  */
   public ArrayList<GameRecord> records = new ArrayList<GameRecord>();
-  public int dif = 0;//difficulty
+  /**
+  dif is the difficulty level
+  */
+  public int dif = 0;
+  /**
+  rd is an instance of a format of the leaderboard.
+  */
   public ResultDisplay rd = new ResultDisplay();
   /**
   * Constructor
@@ -47,7 +59,7 @@ public class Field {
       System.out.printf("Choose a level: Easy, medium or hard: %n");
       Scanner sc = new Scanner(System.in);
       if(sc.hasNextLine()){
-        s = sc.nextLine();
+        String s = sc.nextLine();
         m = Ls(s);
         n = Ls(s);
         if(s.toUpperCase().equals("EASY")){
@@ -165,7 +177,7 @@ public class Field {
   /**
   * Perferm the operation of printing the board
   */
-  public void print() {
+  public static void print() {
     for(int i = 0; i < f.length; i++) {
       for(int j = 0; j < f[0].length; j++) {
         if(f[i][j].ic || f[i][j].isf || f[i][j].isq) {
@@ -182,8 +194,7 @@ public class Field {
   */
 public void operate(){
   Scanner sc = new Scanner(System.in);
-  int row, col;
-  String s;
+  String s = "";
   System.out.println("Click: x, y");
   System.out.println("Set Flag: f x,y");
   System.out.println("Set Question Mark: q x,y");
@@ -194,30 +205,7 @@ public void operate(){
         t.start();
         timehelper = false;
       }
-      switch(s.substring(0,1)) {
-        case"f":
-        row = Integer.parseInt(s.replaceAll("\\s+","").substring(1,s.replaceAll("\\s+","").indexOf(",")));
-        col = Integer.parseInt(s.substring(s.indexOf(",")+1));
-        f[row][col].setFlag();
-        print();
-        break;
-        case"q":
-        row = Integer.parseInt(s.replaceAll("\\s+","").substring(1,s.replaceAll("\\s+","").indexOf(",")));
-        col = Integer.parseInt(s.substring(s.indexOf(",")+1));
-        f[row][col].setqm();
-        print();
-        break;
-        case"l":
-        row = Integer.parseInt(s.replaceAll("\\s+","").substring(1,s.replaceAll("\\s+","").indexOf(",")));
-        col = Integer.parseInt(s.substring(s.indexOf(",")+1));
-        lrClick(row,col);
-        break;
-        default:
-        row = Integer.parseInt(s.replaceAll("\\s+","").substring(0,s.replaceAll("\\s+","").indexOf(",")));
-        col = Integer.parseInt(s.substring(s.indexOf(",")+1));
-        click(row,col);
-        break;
-      }
+      parseUserInput(s);
       if(isLose()) {
         System.out.println("You Lose");
         t.end();
@@ -232,6 +220,38 @@ public void operate(){
   } while(!iswin());
   t.end();
   System.out.println("You Win");
+}
+
+/**
+Performs the operation of parsing the input of the user.
+*/
+
+public void parseUserInput(String s){
+  int row, col;
+  switch(s.substring(0,1)) {
+    case"f":
+    row = Integer.parseInt(s.replaceAll("\\s+","").substring(1,s.replaceAll("\\s+","").indexOf(",")));
+    col = Integer.parseInt(s.substring(s.indexOf(",")+1));
+    f[row][col].setFlag();
+    print();
+    break;
+    case"q":
+    row = Integer.parseInt(s.replaceAll("\\s+","").substring(1,s.replaceAll("\\s+","").indexOf(",")));
+    col = Integer.parseInt(s.substring(s.indexOf(",")+1));
+    f[row][col].setqm();
+    print();
+    break;
+    case"l":
+    row = Integer.parseInt(s.replaceAll("\\s+","").substring(1,s.replaceAll("\\s+","").indexOf(",")));
+    col = Integer.parseInt(s.substring(s.indexOf(",")+1));
+    lrClick(row,col);
+    break;
+    default:
+    row = Integer.parseInt(s.replaceAll("\\s+","").substring(0,s.replaceAll("\\s+","").indexOf(",")));
+    col = Integer.parseInt(s.substring(s.indexOf(",")+1));
+    click(row,col);
+    break;
+  }
 }
 /**
 * Perferm the operation of if the user lose the Game
@@ -255,51 +275,82 @@ public boolean isLose() {
 */
 public void click(int i, int j) {
   if(f[i][j].type == "Bomb"){
-    System.out.println("Game Over");
-    f[i][j].ic = true;
-    print();
-    return;
+    clickBomb(i,j);
   }
   if(f[i][j].type == "Number") {
-    Thread thread = new Thread() {
-      public void run() {
-        new ClickSound();
-        try {
-          this.sleep(50);
-        } catch(Exception e) {
-          ;
-        }
+    clickNumber(i,j);
+  }
+  if(f[i][j].type == "Blank") {
+    clickBlank(i,j);
+  }
+}
+
+/**
+Performs the operation of click on a square with a bomb
+@param i the row coordinator
+@param j the column coordinator
+*/
+public static void clickBomb(int i, int j){
+  System.out.println("Game Over");
+  f[i][j].ic = true;
+  print();
+  return;
+}
+
+/**
+Performs the operation of click on a square with a number
+@param i the row coordinator
+@param j the column coordinator
+*/
+
+public static void clickNumber(int i, int j){
+  Thread thread = new Thread() {
+    public void run() {
+      new ClickSound();
+      try {
+        this.sleep(50);
+      } catch(Exception e) {
+        ;
       }
-    };
-    thread.start();
-    f[i][j].ic = true;
-    if(iswin()) {
-      for(int i1 = 0; i1 < f.length; i1++){
-        for(int j1 = 0; j1 < f[0].length; j1++){
-          if(f[i1][j1].type.equals("Bomb")) {
-            f[i1][j1].setFlag();
-          }
+    }
+  };
+  thread.start();
+  f[i][j].ic = true;
+  if(iswin()) {
+    for(int i1 = 0; i1 < f.length; i1++){
+      for(int j1 = 0; j1 < f[0].length; j1++){
+        if(f[i1][j1].type.equals("Bomb")) {
+          f[i1][j1].setFlag();
         }
       }
     }
   }
-  if(f[i][j].type == "Blank") {
-    Thread thread = new Thread() {
-      public void run() {
-        new ClickSound();
-        try {
-          this.sleep(50);
-        } catch(Exception e) {
-          ;
-        }
-      }
-    };
-    thread.start();
-    ((Blank)f[i][j]).click();
-    BlankHelper(i,j);
-  }
   print();
 }
+
+/**
+Performs the operation of click on a blank square
+@param i the row coordinator
+@param j the column coordinator
+*/
+public void clickBlank(int i, int j){
+  Thread thread = new Thread() {
+    public void run() {
+      new ClickSound();
+      try {
+        this.sleep(50);
+      } catch(Exception e) {
+        ;
+      }
+    }
+  };
+  thread.start();
+  ((Blank)f[i][j]).click();
+  BlankHelper(i,j);
+  print();
+
+}
+
 /**
 * Perferm the operation of right left click that click all the sorrounding
 * blocks if the the block is nuber and the # of surronding flags equals to
@@ -307,7 +358,7 @@ public void click(int i, int j) {
 *@param a the row coordinator
 *@param b the column coordinator
 */
-public void lrClick(int a, int b){
+public static void lrClick(int a, int b){
   if(!lrClickCheck(a,b))
 	  return;
   for(int i = a+1; i>a-2; i--){
@@ -329,7 +380,7 @@ public void lrClick(int a, int b){
 * @param b the column coordinator
 * @return true if it satisfies
 */
-public boolean lrClickCheck(int a, int b) {
+public static boolean lrClickCheck(int a, int b) {
 	if(!(f[a][b]).type.equals("Number") || f[a][b].ic != true)
 		return false;
 	int x = 0;
@@ -374,7 +425,7 @@ public void BlankHelper(int i, int j){
     * Perferm the operation of checking if the user wins
     * @return true if the user win
     */
-    public boolean iswin() {
+    public static boolean iswin() {
       for(Block[] i : f) {
         for(Block j : i) {
           if(j.type.equals("Number")) {
@@ -388,27 +439,4 @@ public void BlankHelper(int i, int j){
       }
       return true;
     }
-    /*public static void main(String[] args){
-      Field test = new Field();
-      //The sequence should be 1 generateb 2 generaten 3 generateb1
-      test.generateb();
-      test.generaten();
-      test.generateb1();
-      System.out.println("Loading...");
-      System.out.println();
-      test.print();
-      test.operate();
-      if (test.iswin()) {
-    	  	double time = test.t.getTime();
-    	  	System.out.println("What's your name?");
-
-    	  	Scanner sc = new Scanner(System.in);
-    	  	String userName = sc.nextLine();
-    	  	test.lb.updateName(userName);
-    	  	test.lb.updateGame(userName,time,test.dif);
-    	  	test.records = test.lb.orderByTime(test.dif);
-    	  	test.rd.printResult(test.records);
-      }
-    }*/
-
-  }
+}
