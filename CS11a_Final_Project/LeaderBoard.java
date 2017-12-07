@@ -1,25 +1,26 @@
 /**
 *This class connects to a SQLite database for storing relevant data
-*and contains algorithms for calculating each player's scores.It is
-*responsible for storing relevant information and displaying the
+*and contains algorithms for calculating each player's scores.It is 
+*responsible for storing relevant information and displaying the 
 *leader board whenever needed.
 *@author Zhaonan Li
 */
-package CS11a_Final_Project;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class LeaderBoard{
-
+  
   public Connection c = null;
   public Statement stmt = null;
   public String sql = new String();//sql is command in SQL
   public ArrayList<GameRecord> records = new ArrayList<GameRecord>();
-
-  //This method helps to connect to the leader board database and avoids
-  //duplicating code
+  
+  /**
+   *This method helps to connect to the leader board database, mainly to avoids
+   *duplicating code
+   */
   public void connect() {
 	  try {
 	  Class.forName("org.sqlite.JDBC");
@@ -31,17 +32,22 @@ public class LeaderBoard{
 				  ": " + e.getMessage());
 	  }
   }
-
-  //This method inserts user names to the player table.
+  
+  /**
+   *This method inserts user names to the player table. Names are always 
+   *stored in upper cases. If the name is not in the database, the method
+   *will automatically create an entry in players table
+   *@param String name 
+   */
   public void updateName(String name) {
 	  if (nameId(name) != -1) {
-		  System.out.println("name exists");
+		  //System.out.println("name exists");
 	  } else {
 		  try {
 			  connect();
 			  c.setAutoCommit(false);
 			  stmt = c.createStatement();
-			  sql = "INSERT INTO players (userName) "
+			  sql = "INSERT INTO players (userName) " 
 			  		+"VALUES(\""+ name.toUpperCase() +"\");";
 			  stmt.executeUpdate(sql);
 			  stmt.close();
@@ -55,9 +61,14 @@ public class LeaderBoard{
 		  }
 	  }
   }
-
-  //This method updates information inside playData
-  //un is user name, tm is time taken in second and level is level
+  
+  /**
+   * This method updates information inside playData. un is user name, tm is 
+   * time taken in second and level is level
+   * @param un user name
+   * @param tm time taken for one game
+   * @param level difficulty level of the game
+   */
   public void updateGame(String un, double tm, int level) {
 	   try {
 		   updateName(un);
@@ -65,9 +76,9 @@ public class LeaderBoard{
 		   connect();
 		   c.setAutoCommit(false);
 		   stmt = c.createStatement();
-		   sql = "INSERT INTO GameData (userName_id,date,time,level) "
+		   sql = "INSERT INTO GameData (userName_id,date,time,level) " 
 				  	+"VALUES("+ id +","
-				  	+ "\"" + getTime() +"\""
+				  	+ "\"" + getDateTime() +"\""
 				  	+ ","+ tm + "," + level
 				  	+ ");";
 		   stmt.executeUpdate(sql);
@@ -80,20 +91,27 @@ public class LeaderBoard{
 					  +": "+e.getMessage());
 			  System.exit(0);
 		  }
-
+	   
   }
-
-  //This method returns current time in desired format
-  public String getTime() {
+  
+  /**
+   *This method returns current time in desired format
+   *@return String current time in the local time zone
+   */
+  public String getDateTime() {
 	  LocalDateTime now = LocalDateTime.now();
 	  DateTimeFormatter formatter = DateTimeFormatter.ofPattern(
 			  "yyyy-MM-dd HH:mm:ss");
 	  String time = now.format(formatter);
 	  return time;
   }
-
-  //This method checks if the user name is taken. If name doesn't
-  //exist, it returns -1
+  
+  /**
+   * This method checks if the user name is taken. If name doesn't
+   * exist, it returns -1
+   * @return int the id of the username in the player table
+   * @param String name
+   */
   public int nameId(String name) {
 	  try {
 	  connect();
@@ -107,7 +125,7 @@ public class LeaderBoard{
 			  return id;
 		  }
 	  	} rs.close();stmt.close();c.close();
-
+	  	
 	  } catch(Exception e){
 		  System.out.println("There's an error:"+e.getClass().getName()
 				  +": "+e.getMessage());
@@ -115,9 +133,13 @@ public class LeaderBoard{
 	  }
 	  return -1;
   }
-
-  //This method returns an arraylist of object GameRecord, based on
-  //time taken for certain level of difficulty for all players
+  
+  /**
+   * This method returns an arraylist of object GameRecord, based on
+   * time taken for certain level of difficulty for all players
+   * @return ArrayList<GameRecord> all the game records ordered by time
+   * @param int level an integer indicating difficulty
+   */
   public ArrayList<GameRecord> orderByTime (int level) {
 	  records.clear();
 	  try {
@@ -130,6 +152,7 @@ public class LeaderBoard{
 		  		+ "GameData ON GameData.userName_id = players.id WHERE "
 		  		+ "level=" + level +" ORDER BY GameData.time"
 		  				+ " ASC;");
+		  System.out.println("---Leader Board---");
 		  while (rs.next()) {
 			  String name = rs.getString("userName");
 			  String date = rs.getString("date");
@@ -148,9 +171,13 @@ public class LeaderBoard{
 	  }
 	  return records;
   }
-
-  //This methods returns an arraylist of GameRecord object sorted
-  //based on the date the game is played
+  
+  /**
+   * This methods returns an arraylist of GameRecord object sorted
+   * based on the date the game is played
+   * @return ArrayList<GameRecord> all the game records ordered by date
+   * @param String user name
+   */
   public ArrayList<GameRecord> playerDateSort(String un){
 	  records.clear();
 	  int id = nameId(un);
@@ -164,6 +191,7 @@ public class LeaderBoard{
 		  		+ "GameData ON GameData.userName_id = players.id WHERE "
 		  		+ "userName_id =" + id +" ORDER BY GameData.date"
 		  				+ " DESC;");
+		  System.out.println("---Five of Your Most Recent Games---");
 		  while (rs.next()) {
 			  String name = rs.getString("userName");
 			  String date = rs.getString("date");
@@ -182,9 +210,14 @@ public class LeaderBoard{
 	  }
 	  return records;
   }
-
-  //This methods returns an arraylist of GameRecord object sorted
-  //based on the date the game is played
+  
+  /**
+   * This methods returns an array list of GameRecord object sorted
+   * based by an user's best performance of selected difficulty
+   * @return ArrayList<GameRecord> all the game records ordered by time
+   * @param String un user name
+   * @param int lv level of difficulty
+   */
   public ArrayList<GameRecord> playerTimeSort(String un, int lv){
 	  records.clear();
 	  int id = nameId(un);
@@ -199,6 +232,7 @@ public class LeaderBoard{
 		  		+ "userName_id =" + id +" AND level=" +lv
 		  		+ " ORDER BY GameData.time"
 		  		+ " ASC;");
+		  System.out.printf("---Five of Your Best Performance at Level %d---",lv);
 		  while (rs.next()) {
 			  String name = rs.getString("userName");
 			  String date = rs.getString("date");
@@ -217,8 +251,11 @@ public class LeaderBoard{
 	  }
 	  return records;
   }
-
-  //This method creates a table in the database for storing players' user names
+  
+  /**
+   * This method creates a table in the database for storing players' user names
+   * named player
+   */
   public void createPlayerTable(){
 	  try {
 		  connect();
@@ -237,9 +274,11 @@ public class LeaderBoard{
 	  }
 	  System.out.println("Table created successfully!");
   }
-
-  //This method creates a table in the database for storing all relevant information
-  //for every game
+  
+  /**
+   * This method creates a table in the database for storing all relevant information
+   * for every game named game data
+   */
   public void createDataTable(){
 	  try {
 		  connect();
