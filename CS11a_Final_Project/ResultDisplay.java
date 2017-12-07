@@ -2,6 +2,7 @@
  *This class formats and prints out results when called
  *@author Zhaonan Li
  */
+package CS11a_Final_Project;
 
 import java.util.ArrayList;
 
