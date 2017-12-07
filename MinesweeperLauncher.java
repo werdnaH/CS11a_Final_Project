@@ -1,6 +1,15 @@
+/**
+This class launches the minesweeper program, and connects with the LeaderBoard
+database.
+*/
+
 import java.util.Scanner;
 import CS11a_Final_Project.*;
 public class MinesweeperLauncher {
+  /**
+  This main method runs the entire program.
+  @param args is a string of arrays which is ignored.
+  */
   public static void main(String[] args){
     Field test = new Field();
     test.generateb();
