@@ -8,4 +8,4 @@ SQlite3 can be downloaded at:
 https://www.sqlite.org/download.html
 
 The driver can be downloaded at:
-https://github.com/xerial/sqlite-jdbc
+https://bitbucket.org/xerial/sqlite-jdbc/downloads/
