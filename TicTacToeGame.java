@@ -99,7 +99,7 @@ public class TicTacToeGame{
   /**
   gameOver()
   This method checks to see if a player has won the game yet.
-  It returns true if a player has won the game, and false if a player has not.
+  @return is true if a player has won the game, and false if a player has not.
   */
 
   public static boolean gameOver(){
@@ -132,8 +132,9 @@ public class TicTacToeGame{
   /**
   horizontalSearch(i,j,a)
   This method searches for wins on the board in the horizontal direction.
-  @param i and @param j are the starting coordinates. @param a is an "X" or an
-  "O", keeping track of what letters to check for.
+  @param i and
+  @param j are the starting coordinates.
+  @param a is an "X" or an "O", keeping track of what letters to check for.
   @return is a boolean. If true, a win has been found. If false, no win has
   been found.
   */
@@ -159,8 +160,9 @@ public class TicTacToeGame{
   /**
   verticalSearch(i,j,a)
   This method searches for wins on the board in the vertical direction.
-  @param i and @param j are the starting coordinates. @param a is an "X" or an
-  "O", keeping track of what letters to check for.
+  @param i and
+  @param j are the starting coordinates.
+  @param a is an "X" or an "O", keeping track of what letters to check for.
   @return is a boolean. If true, a win has been found. If false, no win has
   been found.
   */
@@ -186,8 +188,9 @@ public class TicTacToeGame{
   /**
   diagonalSearch(i,j,a)
   This method searches for wins on the board in the diagonal direction.
-  @param i and @param j are the starting coordinates. @param a is an "X" or an
-  "O", keeping track of what letters to check for.
+  @param i and
+  @param j are the starting coordinates.
+  @param a is an "X" or an "O", keeping track of what letters to check for.
   @return is a boolean. If true, a win has been found. If false, no win has
   been found.
   */
@@ -223,7 +226,7 @@ public class TicTacToeGame{
   coordinates of the square they wish to occupy. It checks to see whether the
   game has been won yet.
   It takes no input.
-  It returns a value, true if a player has won the game and false if a player
+  @return is a boolean, true if a player has won the game and false if a player
   has not yet won the game.
   */
 
@@ -238,7 +241,7 @@ public class TicTacToeGame{
       else{
         p = p2;
       }
-      System.out.println(p + ", enter the coordinates (as integers) of where you wish to play: ");
+      System.out.println(p + ", enter the coordinates (as integers, one on each line) of where you wish to play: ");
       getCoordinates();
       count++;
       b = gameOver();
@@ -282,7 +285,7 @@ public class TicTacToeGame{
   This method reads in the second coordinate number the user enters and checks
   to ensure the input is valid.
   It takes no input.
-  It returns a boolean, true if the input is valid and false if it isn't.
+  @return is a boolean, true if the input is valid and false if it isn't.
   */
 
   public static boolean readSecondInput(){
