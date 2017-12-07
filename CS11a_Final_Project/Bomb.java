@@ -1,3 +1,6 @@
+/**
+This represents a block that is a bomb.
+*/
 package CS11a_Final_Project;
 public class Bomb extends Block {
   public Bomb(){
