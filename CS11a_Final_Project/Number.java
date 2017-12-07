@@ -1,3 +1,6 @@
+/**
+This represents a block that is a number.
+*/
 package CS11a_Final_Project;
 public class Number extends Block{
   public int n;
