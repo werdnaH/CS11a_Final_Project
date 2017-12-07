@@ -1,4 +1,5 @@
 /*
+This class allows the Minesweeper program to play a sound whenever a user sets a flag.
 reference: https://www.ntu.edu.sg/home/ehchua/programming/java/J8c_PlayingSound.html
 */
 package CS11a_Final_Project;
