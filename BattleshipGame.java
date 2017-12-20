@@ -117,8 +117,8 @@ public class BattleshipGame{
         ships = p1ships;
       }
       System.out.printf("%s, choose a target: %n",p);
-      int x = readTarget();
-      int y = readTarget();
+      int x = readInt();
+      int y = readInt();
       missileFire(board2, x, y, pboard, ships);
       b = gameOver(ships);
       if(b){
@@ -129,13 +129,12 @@ public class BattleshipGame{
   }
 
   /**
-  readTarget()
-  This method reads in the coordinate the user enters for where they would like
-  to fire.
+  readInt()
+  This method reads in the coordinate the user enters.
   It takes no input.
   @return returns the input.
   */
-  public static int readTarget(){
+  public static int readInt(){
     int x = 0;
     boolean d = false;
     do{
@@ -147,6 +146,10 @@ public class BattleshipGame{
         else{
           d = true;
         }
+      }
+      else{
+        scan.next();
+        System.out.println("Enter a valid integer: ");
       }
     }while(!d);
     return x;
@@ -223,10 +226,10 @@ public class BattleshipGame{
   It returns nothing.
   */
   public static void setBoardCoordinates1(){
-    int w = getBoardInput();
-    int x = getBoardInput();
-    int y = getBoardInput();
-    int z = getBoardInput();
+    int w = readInt();
+    int x = readInt();
+    int y = readInt();
+    int z = readInt();
     setShip1(w,x,y,z);
     b = setComplete(s1);
   }
@@ -261,36 +264,13 @@ public class BattleshipGame{
   It returns nothing.
   */
   public static void setBoardCoordinates2(){
-    int w = getBoardInput();
-    int x = getBoardInput();
-    int y = getBoardInput();
-    int z = getBoardInput();
+    int w = readInt();
+    int x = readInt();
+    int y = readInt();
+    int z = readInt();
     setShip2(w,x,y,z);
     b = setComplete(s2);
 
-  }
-
-  /**
-  getBoardInput()
-  This method gets the input from the user of where they would like to place
-  their ships, and ensures the input is valid.
-  It takes no input.
-  @return is the coordinate the user inputted.
-  */
-  public static int getBoardInput(){
-    int x = -1;
-    do
-    if(scan.hasNextInt()){
-      x = scan.nextInt()-1;
-      if(x<0||x>7){
-        System.out.printf("Enter valid integer coordinates: %n");
-      }
-    }
-    else{
-      scan.next();
-      System.out.println("Enter valid integer coordinates: ");
-    }while(x==-1);
-    return x;
   }
 
   /**
@@ -381,7 +361,7 @@ public class BattleshipGame{
 
   public static void searchShipDiagonal(int w, int x, int y, int z, boolean[] s, String[][] board, int[][] pships){
     int a = y-w;
-    if(a<0){
+    if(a<0||a>5){
       System.out.println("Retry. The second coordinates must be greater than the first: ");
     }
     else{
@@ -437,9 +417,10 @@ public class BattleshipGame{
 
   public static void searchShipVertical(int w, int x, int y, int z, boolean[] s, String[][] board, int[][] pships){
     int a = y-w;
-    if(a<0){
+    if(a<0||a>5){
       System.out.println("Retry. The second coordinates must be greater than the first: ");
     }
+    else{
       boolean b = true;
       if(s[a]==true){
         for(int i = w; i<=y; i++){
@@ -463,7 +444,7 @@ public class BattleshipGame{
     else{
       System.out.println("You've already set a ship of that length!");
     }
-
+  }
 
 
   }
@@ -483,7 +464,7 @@ public class BattleshipGame{
 
   public static void searchShipArea1(int w, int x, int y, int z, boolean[] s, String[][] board, int[][] pships){
     int a = y-w;
-    if(a<0){
+    if(a<0||a>5){
       System.out.println("Retry. The second coordinates must be greater than the first: ");
     }
     else{
@@ -521,7 +502,7 @@ public class BattleshipGame{
   public static void searchShipHorizontal(int w, int x, int y, int z, boolean[] s, String[][] board, int[][] pships){
     int a = z-x;
     boolean b = true;
-    if(a<0){
+    if(a<0||a>5){
       System.out.println("Retry. The second coordinates must be greater than the first: ");
     }
     else{
