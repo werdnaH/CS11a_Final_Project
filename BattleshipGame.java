@@ -118,6 +118,7 @@ public class BattleshipGame{
         pboard = p2board;
         ships = p1ships;
       }
+      printBoard(pboard);
       System.out.printf("%s, choose a target: %n",p);
       int x = readInt();
       int y = readInt();
@@ -610,7 +611,6 @@ public class BattleshipGame{
     System.out.println("You missed!");
     pboard[x][y]="N";
     }
-  printBoard(pboard);
   }
 
   /**
