@@ -89,6 +89,8 @@ public class BattleshipGame{
     createPBoards();
 
     playGame();
+
+    b = false;
   }
 
   /**
