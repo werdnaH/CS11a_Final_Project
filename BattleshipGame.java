@@ -68,16 +68,25 @@ public class BattleshipGame{
   public static void main(String[] args){
 
     getPlayerNames();
-    System.out.print("Enter the starting coordinates, followed by the ending");
-    System.out.print(" coordinates, of where you want to play each ship. Place");
-    System.out.println(" one integer on each line.");
+    System.out.print("Enter the starting coordinates, followed by the ending ");
+    System.out.println("coordinates, of where you want to play each ship.");
+    System.out.print("To set the coordinates, you will enter four digits, ");
+    System.out.print("one on each line. The first two numbers will be the ");
+    System.out.print("the starting coordinates of your ship, the last two ");
+    System.out.println("will be the ending coordinates of your ship.");
+    System.out.println("Enter digits 1-8.");
+    System.out.print("You must enter valid digits so that the ship would lay ");
+    System.out.print("flat on a physical board. Either the first two coordinates ");
+    System.out.print("must be the same, the last two coordinates must be the same, ");
+    System.out.println("or the two coordinates must differ by the same amount.");
+    System.out.println("You will place five ships: Of lengths 1, 2, 3, 4, and 5.");
     board1Set(p1);
     board2Set(p2);
     System.out.println("We are ready to begin!");
     System.out.println("Set the coordinates of the ship you want to hit!");
 
-    createPBoards();
 
+    createPBoards();
 
     playGame();
   }
@@ -128,12 +137,18 @@ public class BattleshipGame{
   */
   public static int readTarget(){
     int x = 0;
-    if(scan.hasNextInt()){
-      x = scan.nextInt()-1;
-      if(x<0||x>7){
-        System.out.println("Enter a valid integer: ");
+    boolean d = false;
+    do{
+      if(scan.hasNextInt()){
+        x = scan.nextInt()-1;
+        if(x<0||x>7){
+          System.out.println("Enter a valid integer: ");
+        }
+        else{
+          d = true;
+        }
       }
-    }
+    }while(!d);
     return x;
   }
 
@@ -192,14 +207,10 @@ public class BattleshipGame{
         board1[i][j] = "0";
       }
     }
+    printBoard(board1);
     do{
       setBoardCoordinates1();
       printBoard(board1);
-      for(int i = 0; i<p1ships.length; i++){
-        for(int j = 0; j<p1ships[i].length; j++){
-          System.out.printf(p1ships[i][j] + " ");
-        }
-      }
     }while(!b);
     System.out.printf("%s is set!%n",p1);
 
@@ -234,14 +245,10 @@ public class BattleshipGame{
         board2[i][j] = "0";
       }
     }
+    printBoard(board2);
     do{
       setBoardCoordinates2();
       printBoard(board2);
-      for(int i = 0; i<p2ships.length; i++){
-        for(int j = 0; j<p2ships[i].length; j++){
-          System.out.printf(p2ships[i][j] + " ");
-        }
-      }
     }while(!b);
     System.out.printf("%s is set!%n",p2);
 
@@ -374,39 +381,44 @@ public class BattleshipGame{
 
   public static void searchShipDiagonal(int w, int x, int y, int z, boolean[] s, String[][] board, int[][] pships){
     int a = y-w;
-    boolean b = true;
-    if(s[a]==true){
-      int xcopy = x;
-      loop1:
-      for(int i = w; i<=y; i++){
-        for(int j = xcopy; j<=z; j++){
-          b = checkShip(x,i, board);
-          if(b){
-            break;
-          }
-          xcopy++;
-          continue loop1;
-        }
-      }
-      if(b){
-        int count = 0;
-        loop2:
-        for(int i = w; i<=y; i++){
-          for(int j = x; j<=z; j++){
-            board[i][j] = "X";
-            pships[a][count] = x+1;
-            count++;
-            pships[a][count] = i+1;
-            count++;
-            x++;
-            continue loop2;
-          }
-        }
-        s[a]=false;
-      }
+    if(a<0){
+      System.out.println("Retry. The second coordinates must be greater than the first: ");
     }
     else{
-      System.out.println("You've already set that ship!");
+      boolean b = true;
+      if(s[a]==true){
+        int xcopy = x;
+        loop1:
+        for(int i = w; i<=y; i++){
+          for(int j = xcopy; j<=z; j++){
+            b = checkShip(x,i, board);
+            if(b){
+              break;
+            }
+            xcopy++;
+            continue loop1;
+          }
+        }
+        if(b){
+          int count = 0;
+          loop2:
+          for(int i = w; i<=y; i++){
+            for(int j = x; j<=z; j++){
+              board[i][j] = "X";
+              pships[a][count] = x+1;
+              count++;
+              pships[a][count] = i+1;
+              count++;
+              x++;
+              continue loop2;
+            }
+          }
+          s[a]=false;
+        }
+      }
+      else{
+        System.out.println("You've already set a ship of that length!");
+      }
     }
   }
 
@@ -425,29 +437,33 @@ public class BattleshipGame{
 
   public static void searchShipVertical(int w, int x, int y, int z, boolean[] s, String[][] board, int[][] pships){
     int a = y-w;
-    boolean b = true;
-    if(s[a]==true){
-      for(int i = w; i<=y; i++){
-        b = checkShip(i,x, board);
-        if(b){
-          break;
-      }
+    if(a<0){
+      System.out.println("Retry. The second coordinates must be greater than the first: ");
     }
-    if(b){
-      int count = 0;
-      for(int i = w; i<=y; i++){
-        board[i][x] = "X";
-        pships[a][count] = i+1;
-        count++;
-        pships[a][count] = x+1;
-        count++;
+      boolean b = true;
+      if(s[a]==true){
+        for(int i = w; i<=y; i++){
+          b = checkShip(i,x, board);
+          if(b){
+            break;
+        }
       }
-      s[a]=false;
+      if(b){
+        int count = 0;
+        for(int i = w; i<=y; i++){
+          board[i][x] = "X";
+          pships[a][count] = i+1;
+          count++;
+          pships[a][count] = x+1;
+          count++;
+        }
+        s[a]=false;
+      }
     }
     else{
-      System.out.println("You've already set that ship!");
-      }
-  }
+      System.out.println("You've already set a ship of that length!");
+    }
+
 
 
   }
@@ -467,19 +483,24 @@ public class BattleshipGame{
 
   public static void searchShipArea1(int w, int x, int y, int z, boolean[] s, String[][] board, int[][] pships){
     int a = y-w;
-    boolean b = true;
-    if(s[a]==true){
-      b = checkShip(w,x, board);
-      if(b){
-        int count = 0;
-        board[w][x] = "X";
-        pships[a][count] = w+1;
-        count++;
-        pships[a][count] = x+1;
-        s[a]=false;
-      }
+    if(a<0){
+      System.out.println("Retry. The second coordinates must be greater than the first: ");
+    }
     else{
-      System.out.println("You've already set that ship!");
+      boolean b = true;
+      if(s[a]==true){
+        b = checkShip(w,x, board);
+        if(b){
+          int count = 0;
+          board[w][x] = "X";
+          pships[a][count] = w+1;
+          count++;
+          pships[a][count] = x+1;
+          s[a]=false;
+        }
+      }
+      else{
+        System.out.println("You've already set a ship of that length!");
       }
     }
   }
@@ -500,27 +521,32 @@ public class BattleshipGame{
   public static void searchShipHorizontal(int w, int x, int y, int z, boolean[] s, String[][] board, int[][] pships){
     int a = z-x;
     boolean b = true;
-    if(s[a]==true){
-      for(int i =x; i<=z; i++){
-        b = checkShip(w,i, board);
-        if(b){
-        break;
+    if(a<0){
+      System.out.println("Retry. The second coordinates must be greater than the first: ");
+    }
+    else{
+      if(s[a]==true){
+        for(int i =x; i<=z; i++){
+          b = checkShip(w,i, board);
+          if(b){
+          break;
+          }
         }
-      }
 
-      if(b){
-        int count = 0;
-        for(int i = x; i<=z; i++){
-          board[w][i] = "X";
-          pships[a][count] = w+1;
-          count++;
-          pships[a][count] = i+1;
-          count++;
+        if(b){
+          int count = 0;
+          for(int i = x; i<=z; i++){
+            board[w][i] = "X";
+            pships[a][count] = w+1;
+            count++;
+            pships[a][count] = i+1;
+            count++;
+          }
+          s[a]=false;
         }
-        s[a]=false;
       }
     else{
-      System.out.println("You've already set that ship!");
+      System.out.println("You've already set a ship of that length!");
     }
   }
 }
