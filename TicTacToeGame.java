@@ -62,13 +62,23 @@ public class TicTacToeGame{
 
   public static void playGame(){
     boolean b = false;
+    printBoard();
 
     do{
       b = playOneMove();
-
     }while(!b);
 
-    System.out.println(p+" wins!");
+    if(gameOver()){
+      System.out.println(p+" wins!");
+    }
+    else{
+      System.out.println("It's a tie!");
+    }
+    for(int i = 0; i<board[0].length; i++){
+      for(int j = 0; j<board[1].length; j++){
+        board[i][j] = "0";
+      }
+    }
   }
 
   /**
@@ -122,11 +132,22 @@ public class TicTacToeGame{
             return true;
           }
 
-          return false;
         }
       }
     }
     return false;
+  }
+
+  public static boolean isTie(){
+    boolean b = true;
+    for(int i = 0; i<board[0].length; i++){
+      for(int j = 0; j<board[1].length; j++){
+        if(board[i][j].equals("0")){
+          b = false;
+        }
+      }
+    }
+    return b;
   }
 
   /**
@@ -143,6 +164,13 @@ public class TicTacToeGame{
     if(j==0){
       if(board[i][j+1].equals(a)){
         if(board[i][j+2].equals(a)){
+          return(true);
+        }
+      }
+    }
+    if(j==1){
+      if(board[i][j-1].equals(a)){
+        if(board[i][j+1].equals(a)){
           return(true);
         }
       }
@@ -171,6 +199,13 @@ public class TicTacToeGame{
     if(i==2){
       if(board[i-1][j].equals(a)){
         if(board[i-2][j].equals(a)){
+          return(true);
+        }
+      }
+    }
+    if(i==1){
+      if(board[i-1][j].equals(a)){
+        if(board[i+1][j].equals(a)){
           return(true);
         }
       }
@@ -232,6 +267,7 @@ public class TicTacToeGame{
 
   public static boolean playOneMove(){
     boolean b = false;
+    boolean c = false;
     int count = 0;
 
     do{
@@ -245,6 +281,9 @@ public class TicTacToeGame{
       getCoordinates();
       count++;
       b = gameOver();
+      if(!b){
+        b = isTie();
+      }
       printBoard();
 
     }while(!b);
