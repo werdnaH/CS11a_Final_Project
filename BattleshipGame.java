@@ -74,11 +74,11 @@ public class BattleshipGame{
     System.out.print("one on each line. The first two numbers will be the ");
     System.out.print("the starting coordinates of your ship, the last two ");
     System.out.println("will be the ending coordinates of your ship.");
-    System.out.println("Enter digits 1-8.");
+    System.out.println("Enter digits 1-8. As: x /newline y /newline x /newline y");
     System.out.print("You must enter valid digits so that the ship would lay ");
-    System.out.print("flat on a physical board. Either the first two coordinates ");
-    System.out.print("must be the same, the last two coordinates must be the same, ");
-    System.out.println("or the two coordinates must differ by the same amount.");
+    System.out.print("flat on a physical board. Either the x coordinates ");
+    System.out.print("must be the same, the y coordinates must be the same, or ");
+    System.out.println("both the x and y coordinates must differ by the same amount.");
     System.out.println("You will place five ships: Of lengths 1, 2, 3, 4, and 5.");
     board1Set(p1);
     board2Set(p2);
@@ -373,9 +373,10 @@ public class BattleshipGame{
         loop1:
         for(int i = w; i<=y; i++){
           for(int j = xcopy; j<=z; j++){
-            b = checkShip(x,i, board);
-            if(b){
-              break;
+            System.out.println(i + " " + j);
+            b = checkShip(i,j, board);
+            if(!b){
+              break loop1;
             }
             xcopy++;
             continue loop1;
@@ -427,7 +428,7 @@ public class BattleshipGame{
       if(s[a]==true){
         for(int i = w; i<=y; i++){
           b = checkShip(i,x, board);
-          if(b){
+          if(!b){
             break;
         }
       }
@@ -511,8 +512,8 @@ public class BattleshipGame{
       if(s[a]==true){
         for(int i =x; i<=z; i++){
           b = checkShip(w,i, board);
-          if(b){
-          break;
+          if(!b){
+            break;
           }
         }
 
